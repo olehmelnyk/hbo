@@ -36,18 +36,30 @@ router.post("/", (req, res, next) => {
     image,
     description,
     priority,
-    trailerUri
-  } = req.body;
+    trailerUri,
+    excerpt
+  } = req.fields;
 
-  console.log(req);
+  Show.create(
+    {
+      title,
+      subtitle,
+      startDate,
+      image,
+      description,
+      priority,
+      trailerUri,
+      excerpt
+    },
+    (error, show) => {
+      if (error) {
+        console.error(error);
+      }
 
-  Show.create(req.body, (error, show) => {
-    if (error) {
-      console.error(error);
+      res.status(201).send(show);
     }
-
-    res.status(201).send(show);
-  });
+  );
+  res.send(req.fields);
 });
 
 /* protected method - update show by id */
@@ -60,8 +72,9 @@ router.put("/:showId", (req, res, next) => {
     image,
     description,
     priority,
-    trailerUri
-  } = req.body;
+    trailerUri,
+    excerpt
+  } = req.fields;
 
   Show.findOneAndUpdate(
     { _id },
@@ -72,7 +85,8 @@ router.put("/:showId", (req, res, next) => {
       image,
       description,
       priority,
-      trailerUri
+      trailerUri,
+      excerpt
     },
     { new: true },
     (error, show) => {

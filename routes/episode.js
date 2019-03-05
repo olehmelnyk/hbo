@@ -36,16 +36,29 @@ router.post("/", (req, res, next) => {
     relatedSeason,
     description,
     image,
-    trailerUri
-  } = req.body;
+    trailerUri,
+    excerpt
+  } = req.fields;
 
-  Episode.create(req.body, (error, v) => {
-    if (error) {
-      console.error(error);
+  Episode.create(
+    {
+      episodeName,
+      episodeNumber,
+      relatedShow,
+      relatedSeason,
+      description,
+      image,
+      trailerUri,
+      excerpt
+    },
+    (error, v) => {
+      if (error) {
+        console.error(error);
+      }
+
+      res.status(201).send(v);
     }
-
-    res.status(201).send(v);
-  });
+  );
 });
 
 /* protected method - update show by id */
@@ -58,8 +71,9 @@ router.put("/:episodeId", (req, res, next) => {
     relatedSeason,
     description,
     image,
-    trailerUri
-  } = req.body;
+    trailerUri,
+    excerpt
+  } = req.fields;
 
   Episode.findOneAndUpdate(
     { _id },
@@ -70,7 +84,8 @@ router.put("/:episodeId", (req, res, next) => {
       relatedSeason,
       description,
       image,
-      trailerUri
+      trailerUri,
+      excerpt
     },
     { new: true },
     (error, episode) => {

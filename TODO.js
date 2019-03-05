@@ -1,5 +1,6 @@
 1) jwt auth
 2) xml responses
+3) voting
 -----------
 /*
 
@@ -56,7 +57,10 @@ fetch('http://localhost:3000/api/v1/show', {
             long: "and this is long description"
         },
         priority: true
-    }    
+    },
+    headers: new Headers({
+        "Content-type": "application/json"
+    })
 }).then(response => {
         if (response.status !== 201) {
             console.error(response.statusText);

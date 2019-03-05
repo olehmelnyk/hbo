@@ -35,16 +35,28 @@ router.post("/", (req, res, next) => {
     relatedShow,
     description,
     image,
-    trailerUri
-  } = req.body;
+    trailerUri,
+    excerpt
+  } = req.fields;
 
-  Season.create(req.body, (error, season) => {
-    if (error) {
-      console.error(error);
+  Season.create(
+    {
+      seasonName,
+      seasonNumber,
+      relatedShow,
+      description,
+      image,
+      trailerUri,
+      excerpt
+    },
+    (error, season) => {
+      if (error) {
+        console.error(error);
+      }
+
+      res.status(201).send(season);
     }
-
-    res.status(201).send(season);
-  });
+  );
 });
 
 /* protected method - update show by id */
@@ -56,8 +68,9 @@ router.put("/:seasonId", (req, res, next) => {
     relatedShow,
     description,
     image,
-    trailerUri
-  } = req.body;
+    trailerUri,
+    excerpt
+  } = req.fields;
 
   Season.findOneAndUpdate(
     { _id },
@@ -67,7 +80,8 @@ router.put("/:seasonId", (req, res, next) => {
       relatedShow,
       description,
       image,
-      trailerUri
+      trailerUri,
+      excerpt
     },
     { new: true },
     (error, season) => {
