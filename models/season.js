@@ -1,16 +1,11 @@
 const mongoose = require("mongoose");
 const timestamps = require("mongoose-timestamp");
 
+const excerpt = require("../helpers/excerpt");
 require("mongoose-type-url");
 
 const User = require("./user");
 const Show = require("./show");
-
-const excerpt = string =>
-  string
-    .trim()
-    .replace(/\s+/g, "_")
-    .replace(/\W+/g, "");
 
 const SeasonSchema = new mongoose.Schema(
   {
@@ -85,7 +80,8 @@ const SeasonSchema = new mongoose.Schema(
       type: String,
       trim: true,
       index: true,
-      set: excerpt
+      set: excerpt,
+      unique: true
     }
   },
   { collection: "seasons" }
@@ -98,14 +94,14 @@ SeasonSchema.pre("findOneAndUpdate", function(next) {
   const update = this.getUpdate();
 
   if (update.excerpt === undefined) {
-    this.update({}, { excerpt: excerpt(update.title) });
+    this.update({}, { excerpt: excerpt(update.seasonName) });
   }
   next();
 });
 
 SeasonSchema.pre("save", function(next) {
   if (!this.excerpt) {
-    this.excerpt = excerpt(this.title);
+    this.excerpt = excerpt(this.seasonName);
   }
 
   next();

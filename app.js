@@ -26,4 +26,7 @@ app.use("/api/v1/show", require("./routes/show"));
 app.use("/api/v1/season", require("./routes/season"));
 app.use("/api/v1/episode", require("./routes/episode"));
 
+// seed
+require("./seed");
+
 module.exports = app;

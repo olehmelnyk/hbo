@@ -42,14 +42,14 @@ localhost:3000/api/v1/...
 // create a new show
 fetch('http://localhost:3000/api/v1/show', {
     method: "POST",
-    body: {
+    body: JSON.stringify({
         title: "Game of Thrones",
         subtitle: "The winter is coming",
         startDate: new Date(),
         image: {
             square: "https://google.com.ua",
             wide: "https://google.com.ua",
-            extraWide: "https://google.com.ua",
+            extraWide: "https://google.com.ua"
         },
         trailer: "https://youtube.com/got",
         description: {
@@ -57,7 +57,7 @@ fetch('http://localhost:3000/api/v1/show', {
             long: "and this is long description"
         },
         priority: true
-    },
+    }),
     headers: new Headers({
         "Content-type": "application/json"
     })
@@ -96,14 +96,14 @@ fetch('http://localhost:3000/api/v1/show')
 // update show by id
 fetch('http://localhost:3000/api/v1/show/394w3222if023f', {
     method: "PUT",
-    body: {
+    body: JSON.stringify({
         title: "Game of Thrones",
         subtitle: "The winter is coming!",
         startDate: new Date(),
         image: {
             square: "https://google.com.ua/got",
             wide: "https://google.com.ua/got",
-            extraWide: "https://google.com.ua/got",
+            extraWide: "https://google.com.ua/got"
         },
         trailer: "https://youtube.com/got",
         description: {
@@ -111,7 +111,7 @@ fetch('http://localhost:3000/api/v1/show/394w3222if023f', {
             long: "and this is updated long description"
         },
         priority: false
-    }
+    })
 }).then(response => {
         if (response.status !== 200) {
             console.error(response.statusText);
@@ -137,18 +137,3 @@ fetch('http://localhost:3000/api/v1/show/394w3222if023f', {
         console.log(show);
     })
     .catch(error => console.error(error))
-// --------------------------
-fetch("http://localhost:3000/api/v1/show/", {
-    method: "POST", 
-    body: JSON.stringify({
-        image: {
-            square: "https://google.com.ua",
-            wide: "https://google.com.ua",
-            extraWide: "https://google.com.ua"
-        },
-        title: "Show name1",
-        subtitle: "Show description1",
-        startDate: "2019-03-05T20:31:54.000Z"
-    }),
-    headers: new Headers({ "Content-Type": "application/json" })
-}).then(response => response.json()).then(data => console.log(data))

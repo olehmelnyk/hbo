@@ -1,17 +1,10 @@
 const mongoose = require("mongoose");
 const timestamps = require("mongoose-timestamp");
+const excerpt = require("../helpers/excerpt");
 
 const User = require("./user");
 
 require("mongoose-type-url");
-
-const excerpt = string => {
-  if (typeof string !== "string") return "";
-  return string
-    .trim()
-    .replace(/\s+/g, "_")
-    .replace(/\W+/g, "");
-};
 
 const ShowSchema = new mongoose.Schema(
   {
@@ -42,7 +35,8 @@ const ShowSchema = new mongoose.Schema(
       }
     },
     startDate: {
-      type: Date
+      type: Date,
+      default: Date.now()
     },
     image: {
       square: {
@@ -58,7 +52,6 @@ const ShowSchema = new mongoose.Schema(
     trailerUri: {
       type: mongoose.SchemaTypes.Url
     },
-
     priority: {
       type: Boolean,
       default: false
@@ -88,7 +81,8 @@ const ShowSchema = new mongoose.Schema(
       type: String,
       trim: true,
       index: true,
-      set: excerpt
+      set: excerpt,
+      unique: true
     }
   },
   { collection: "shows" }

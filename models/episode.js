@@ -1,17 +1,13 @@
 const mongoose = require("mongoose");
 const timestamps = require("mongoose-timestamp");
 
+const excerpt = require("../helpers/excerpt");
+
 require("mongoose-type-url");
 
 const User = require("./user");
 const Show = require("./show");
 const Season = require("./season");
-
-const excerpt = string =>
-  string
-    .trim()
-    .replace(/\s+/g, "_")
-    .replace(/\W+/g, "");
 
 const EpisodeSchema = new mongoose.Schema(
   {
@@ -29,7 +25,7 @@ const EpisodeSchema = new mongoose.Schema(
       trim: true,
       required: true,
       min: 1,
-      max: 20
+      max: 35
     },
     relatedShow: {
       ref: Show,
@@ -90,7 +86,8 @@ const EpisodeSchema = new mongoose.Schema(
       type: String,
       trim: true,
       index: true,
-      set: excerpt
+      set: excerpt,
+      unique: true
     }
   },
   { collection: "episodes" }
@@ -103,14 +100,14 @@ EpisodeSchema.pre("findOneAndUpdate", function(next) {
   const update = this.getUpdate();
 
   if (update.excerpt === undefined) {
-    this.update({}, { excerpt: excerpt(update.title) });
+    this.update({}, { excerpt: excerpt(update.espisodeName) });
   }
   next();
 });
 
 EpisodeSchema.pre("save", function(next) {
   if (!this.excerpt) {
-    this.excerpt = excerpt(this.title);
+    this.excerpt = excerpt(this.espisodeName);
   }
 
   next();
