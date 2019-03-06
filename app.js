@@ -12,31 +12,12 @@ const config = require("./config");
 const app = express();
 
 // initialize middleware
+app.use(cors());
 app.use(logger("dev"));
 app.use(formidable()); // parsing form data, including application/x-www-form-urlencoded, application/json, and multipart/form-data
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
+
 app.use(cookieParser());
 
-// enable CORS
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-  next();
-});
-
-app.use(
-  sassMiddleware({
-    src: path.join(__dirname, "public"),
-    dest: path.join(__dirname, "public"),
-    indentedSyntax: true, // true = .sass and false = .scss
-    sourceMap: true
-  })
-);
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/v1/auth", require("./routes/auth"));

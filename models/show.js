@@ -5,11 +5,13 @@ const User = require("./user");
 
 require("mongoose-type-url");
 
-const excerpt = string =>
-  string
+const excerpt = string => {
+  if (typeof string !== "string") return "";
+  return string
     .trim()
     .replace(/\s+/g, "_")
     .replace(/\W+/g, "");
+};
 
 const ShowSchema = new mongoose.Schema(
   {
@@ -94,5 +96,22 @@ const ShowSchema = new mongoose.Schema(
 
 // require plugins
 ShowSchema.plugin(timestamps); // automatically adds createdAt and updatedAt timestamps
+
+ShowSchema.pre("findOneAndUpdate", function(next) {
+  const update = this.getUpdate();
+
+  if (update.excerpt === undefined) {
+    this.update({}, { excerpt: excerpt(update.title) });
+  }
+  next();
+});
+
+ShowSchema.pre("save", function(next) {
+  if (!this.excerpt) {
+    this.excerpt = excerpt(this.title);
+  }
+
+  next();
+});
 
 module.exports = mongoose.model("Show", ShowSchema);

@@ -59,7 +59,6 @@ router.post("/", (req, res, next) => {
       res.status(201).send(show);
     }
   );
-  res.send(req.fields);
 });
 
 /* protected method - update show by id */

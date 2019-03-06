@@ -137,3 +137,18 @@ fetch('http://localhost:3000/api/v1/show/394w3222if023f', {
         console.log(show);
     })
     .catch(error => console.error(error))
+// --------------------------
+fetch("http://localhost:3000/api/v1/show/", {
+    method: "POST", 
+    body: JSON.stringify({
+        image: {
+            square: "https://google.com.ua",
+            wide: "https://google.com.ua",
+            extraWide: "https://google.com.ua"
+        },
+        title: "Show name1",
+        subtitle: "Show description1",
+        startDate: "2019-03-05T20:31:54.000Z"
+    }),
+    headers: new Headers({ "Content-Type": "application/json" })
+}).then(response => response.json()).then(data => console.log(data))

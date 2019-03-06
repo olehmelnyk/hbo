@@ -99,4 +99,21 @@ const EpisodeSchema = new mongoose.Schema(
 // require plugins
 EpisodeSchema.plugin(timestamps); // automatically adds createdAt and updatedAt timestamps
 
+EpisodeSchema.pre("findOneAndUpdate", function(next) {
+  const update = this.getUpdate();
+
+  if (update.excerpt === undefined) {
+    this.update({}, { excerpt: excerpt(update.title) });
+  }
+  next();
+});
+
+EpisodeSchema.pre("save", function(next) {
+  if (!this.excerpt) {
+    this.excerpt = excerpt(this.title);
+  }
+
+  next();
+});
+
 module.exports = mongoose.model("Episode", EpisodeSchema);
