@@ -2,11 +2,11 @@ import React, { Suspense, lazy } from "react";
 import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-const ShowList = lazy(() => import("components/Admin/Show/ShowList"));
-const ShowItem = lazy(() => import("components/Admin/Show/ShowItem"));
-const ShowForm = lazy(() => import("components/Admin/Show/ShowForm"));
+const ShowList = lazy(() => import("../../components/Admin/Show/ShowList"));
+const ShowItem = lazy(() => import("../../components/Admin/Show/ShowItem"));
+const ShowForm = lazy(() => import("../../components/Admin/Show/ShowForm"));
 
-const NotFound = lazy(() => import("pages/NotFound"));
+const NotFound = lazy(() => import("../NotFound"));
 
 const Admin = props => {
   return (

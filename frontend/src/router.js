@@ -2,12 +2,12 @@ import React, { Suspense, lazy } from "react";
 import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
-const Landing = lazy(() => import("components/Main/Landing"));
-const Show = lazy(() => import("components/Main/Show"));
-const Signin = lazy(() => import("pages/Auth/signin"));
-const Signup = lazy(() => import("pages/Auth/signup"));
-const Admin = lazy(() => import("pages/Admin"));
-const NotFound = lazy(() => import("pages/NotFound"));
+const Landing = lazy(() => import("./components/Main/Landing"));
+const Show = lazy(() => import("./components/Main/Show"));
+const Signin = lazy(() => import("./pages/Auth/signin"));
+const Signup = lazy(() => import("./pages/Auth/signup"));
+const Admin = lazy(() => import("./pages/Admin"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 const Router = props => {
   return (
