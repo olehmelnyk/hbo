@@ -6,7 +6,9 @@
   "scripts": {
     "client": "cd frontend && npm start",
     "server": "cd backend && npm run dev",
-    "start": "concurrently - kill-others \"npm run server\" \"npm run client\""
+    "start": "concurrently - kill-others \"npm run server\" \"npm run client\"",
+    "pull": "git pull origin master --rebase --autostash",
+    "upd": "npm run pull && cd frontend && npm i && cd ../backend && npm i && cd .. && npm start"
   },
   "repository": {
     "type": "git",
