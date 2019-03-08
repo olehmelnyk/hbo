@@ -1,0 +1,25 @@
+{
+  "name": "hbo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "client": "cd frontend && npm start",
+    "server": "cd backend && npm run dev",
+    "start": "concurrently - kill-others \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olehmelnyk/hbo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/olehmelnyk/hbo/issues"
+  },
+  "homepage": "https://github.com/olehmelnyk/hbo#readme",
+  "dependencies": {
+    "concurrently": "^4.1.0"
+  }
+}
