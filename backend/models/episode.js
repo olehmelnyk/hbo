@@ -94,14 +94,14 @@ EpisodeSchema.pre("findOneAndUpdate", function(next) {
   const update = this.getUpdate();
 
   if (update.excerpt === undefined) {
-    this.update({}, { excerpt: excerpt(update.espisodeName) });
+    this.update({}, { excerpt: excerpt(update.episodeName) });
   }
   next();
 });
 
 EpisodeSchema.pre("save", function(next) {
   if (!this.excerpt) {
-    this.excerpt = excerpt(this.espisodeName);
+    this.excerpt = excerpt(this.episodeName);
   }
 
   next();
