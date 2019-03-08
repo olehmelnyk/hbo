@@ -1,5 +1,8 @@
 import React from "react";
 
+import { withStyles } from "@material-ui/core/styles";
+import { Paper, Typography } from "@material-ui/core";
+
 // const ShowForm = () => <div>show form</div>;
 class ShowForm extends React.Component {
   state = {
@@ -78,10 +81,20 @@ class ShowForm extends React.Component {
   render() {
     const { show } = this.state;
     return (
-      <div>
-        <h1>Form</h1>
-        <pre>{JSON.stringify(show, null, 4)}</pre>
-      </div>
+      <Paper
+        style={{
+          maxWidth: 960,
+          margin: "24px auto",
+          padding: 24
+        }}
+      >
+        <Typography component="h1" variant="h4">
+          {show._id ? `Edit "${show.title}"` : "Add new TV-Show"}
+        </Typography>
+        <Typography>
+          <pre>{JSON.stringify(show, null, 4)}</pre>
+        </Typography>
+      </Paper>
     );
   }
 }

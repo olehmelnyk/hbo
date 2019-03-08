@@ -2,6 +2,7 @@
     This page renders list of all tv-shows
 */
 import React from "react";
+import { Paper, Typography } from "@material-ui/core";
 
 class ShowList extends React.Component {
   state = {
@@ -31,17 +32,25 @@ class ShowList extends React.Component {
     const { shows } = this.state;
 
     return (
-      <div>
-        <h1>Page that show list of all TV-shows (not just feature ones)</h1>
-        <div>
+      <Paper
+        style={{
+          maxWidth: 960,
+          margin: "24px auto",
+          padding: 24
+        }}
+      >
+        <Typography component="h1" variant="h4">
+          Page that show list of all TV-shows (not just featured ones)
+        </Typography>
+        <Typography>
           {shows && shows.length ? (
             /* here you have data from server */
             <pre>{JSON.stringify(shows, null, 4)}</pre>
           ) : (
             "No shows - nothing to display :("
           )}
-        </div>
-      </div>
+        </Typography>
+      </Paper>
     );
   }
 }

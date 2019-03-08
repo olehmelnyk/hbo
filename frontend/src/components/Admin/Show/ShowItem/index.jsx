@@ -1,4 +1,5 @@
 import React from "react";
+import { Paper, Typography } from "@material-ui/core";
 
 // const ShowItem = () => <div>show item</div>;
 class ShowItem extends React.Component {
@@ -29,7 +30,22 @@ class ShowItem extends React.Component {
   render() {
     const { show } = this.state;
 
-    return <pre>{JSON.stringify(show, null, 4)}</pre>;
+    return (
+      <Paper
+        style={{
+          maxWidth: 960,
+          margin: "24px auto",
+          padding: 24
+        }}
+      >
+        <Typography component="h1" variant="h4">
+          {show.title}
+        </Typography>
+        <Typography>
+          <pre>{JSON.stringify(show, null, 4)}</pre>
+        </Typography>
+      </Paper>
+    );
   }
 }
 

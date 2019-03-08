@@ -1,5 +1,5 @@
 import { createMuiTheme } from "@material-ui/core/styles";
-import { red, green, grey } from "@material-ui/core/colors";
+import { red, yellow, grey } from "@material-ui/core/colors";
 
 // https://material-ui.com/customization/themes/
 const theme = createMuiTheme({
@@ -8,8 +8,9 @@ const theme = createMuiTheme({
       main: red[900]
     },
     secondary: {
-      main: green[500]
-    }
+      main: yellow[500]
+    },
+    type: "dark"
   },
 
   typography: {

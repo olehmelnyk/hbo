@@ -2,6 +2,7 @@
     This page renders page with all info regarding tv-show, including seasons and episode lists
 */
 import React from "react";
+import { Paper, Typography } from "@material-ui/core";
 
 class ShowDetails extends React.Component {
   state = {
@@ -27,16 +28,36 @@ class ShowDetails extends React.Component {
 
         this.setState({ show });
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        this.props.history.push("/page_not_found");
+      });
   }
 
   render() {
     const { show } = this.state;
 
-    return Object.entries(show).length > 0 ? (
-      <pre>{JSON.stringify(show, null, 4)}</pre>
-    ) : (
-      "nothing to show"
+    return (
+      <Paper
+        style={{
+          maxWidth: 960,
+          margin: "24px auto",
+          padding: 24
+        }}
+      >
+        <Typography component="h1" variant="h4">
+          {show.title}
+        </Typography>
+        <Typography component="h2" variant="h5">
+          {show.subtitle}
+        </Typography>
+        <Typography>
+          {Object.entries(show).length > 0 ? (
+            <pre>{JSON.stringify(show, null, 4)}</pre>
+          ) : (
+            "Loading..."
+          )}
+        </Typography>
+      </Paper>
     );
   }
 }

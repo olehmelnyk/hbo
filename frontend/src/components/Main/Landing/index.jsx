@@ -2,6 +2,7 @@
     This page renders list of featured tv-shows ("priority: true")
 */
 import React from "react";
+import { Paper, Typography } from "@material-ui/core";
 
 // const Landing = () => <div>Landing Page</div>;
 class Landing extends React.Component {
@@ -32,17 +33,25 @@ class Landing extends React.Component {
     const { shows } = this.state;
 
     return (
-      <div>
-        <h1>Landing Page with featured TV-Shows</h1>
-        <div>
+      <Paper
+        style={{
+          maxWidth: 960,
+          margin: "24px auto",
+          padding: 24
+        }}
+      >
+        <Typography component="h1" variant="h4">
+          Landing Page with featured TV-Shows
+        </Typography>
+        <Typography>
           {shows && shows.length ? (
             /* here you have data from server */
             <pre>{JSON.stringify(shows, null, 4)}</pre>
           ) : (
             "No shows - nothing to display :("
           )}
-        </div>
-      </div>
+        </Typography>
+      </Paper>
     );
   }
 }
