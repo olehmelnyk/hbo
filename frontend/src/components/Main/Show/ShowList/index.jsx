@@ -32,25 +32,29 @@ class ShowList extends React.Component {
     const { shows } = this.state;
 
     return (
-      <Paper
-        style={{
-          maxWidth: 960,
-          margin: "24px auto",
-          padding: 24
-        }}
-      >
-        <Typography component="h1" variant="h4">
-          Page that show list of all TV-shows (not just featured ones)
-        </Typography>
-        <Typography>
-          {shows && shows.length ? (
-            /* here you have data from server */
-            <pre>{JSON.stringify(shows, null, 4)}</pre>
-          ) : (
-            "No shows - nothing to display :("
-          )}
-        </Typography>
-      </Paper>
+      <div>
+        <Paper>
+          <Typography component="h1" variant="h4">
+            Page that show list of all TV-shows (not just featured ones)
+          </Typography>
+        </Paper>
+
+        {shows.length > 0 ? (
+          shows.map(show => (
+            <Paper>
+              <Typography>
+                <pre>{JSON.stringify(show, null, 4)}</pre>
+              </Typography>
+            </Paper>
+          ))
+        ) : (
+          <Paper>
+            <Typography component="p" variant="caption">
+              No shows - nothing to display :(
+            </Typography>
+          </Paper>
+        )}
+      </div>
     );
   }
 }

@@ -33,15 +33,9 @@ class Landing extends React.Component {
     const { shows } = this.state;
 
     return (
-      <Paper
-        style={{
-          maxWidth: 960,
-          margin: "24px auto",
-          padding: 24
-        }}
-      >
+      <Paper>
         <Typography component="h1" variant="h4">
-          Landing Page with featured TV-Shows
+          Landing Page with featured-only TV-Shows
         </Typography>
         <Typography>
           {shows && shows.length ? (

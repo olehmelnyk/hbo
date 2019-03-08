@@ -33,9 +33,7 @@ class ShowItem extends React.Component {
     return (
       <Paper
         style={{
-          maxWidth: 960,
-          margin: "24px auto",
-          padding: 24
+          margin: "24px auto"
         }}
       >
         <Typography component="h1" variant="h4">

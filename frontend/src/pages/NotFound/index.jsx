@@ -24,16 +24,30 @@ const NotFound = props => {
       <Typography component="h2" variant="h2">
         Page not found
       </Typography>
-      <Button
-        variant="contained"
-        color="secondary"
-        onClick={() => props.history.goBack()}
-        style={{
-          margin: "24px"
-        }}
-      >
-        Go back
-      </Button>
+      <div>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => props.history.go("-2")}
+          style={{
+            margin: "24px",
+            width: 120
+          }}
+        >
+          Go back
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => props.history.push("/")}
+          style={{
+            margin: "24px",
+            width: 120
+          }}
+        >
+          Main page
+        </Button>
+      </div>
     </div>
   );
 };

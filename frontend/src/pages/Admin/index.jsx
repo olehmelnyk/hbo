@@ -11,8 +11,14 @@ const NotFound = lazy(() => import("pages/NotFound"));
 const Admin = props => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<LinearProgress color="secondary" />}>
+      <Suspense fallback={<LinearProgress color="primary" />}>
         <Switch>
+          {/* 
+            we can check here if user is authorised 
+            and have access this admin area - 
+            if not - redirect to page not found, lol 
+          */}
+
           <Redirect from="/admin" to="/admin/show" exact />
 
           <Route

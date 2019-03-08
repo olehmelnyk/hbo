@@ -22,6 +22,13 @@ const theme = createMuiTheme({
       text: {
         color: grey[50]
       }
+    },
+    MuiPaper: {
+      root: {
+        margin: "24px auto",
+        padding: "24px",
+        maxWidth: 960
+      }
     }
   }
 });
