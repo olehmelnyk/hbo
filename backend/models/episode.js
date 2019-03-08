@@ -1,26 +1,37 @@
 const mongoose = require("mongoose");
-const timestamps = require("mongoose-timestamp");
-const excerpt = require("../helpers/excerpt");
 
-const User = require("./user");
+const excerpt = require("../helpers/excerpt");
 
 require("mongoose-type-url");
 
-const ShowSchema = new mongoose.Schema(
+const User = require("./user");
+const Show = require("./show");
+const Season = require("./season");
+
+const EpisodeSchema = new mongoose.Schema(
   {
-    title: {
+    episodeName: {
       type: String,
       trim: true,
       index: true,
-      unique: true,
       requred: true,
       minlength: 1,
-      maxlength: 255
+      maxlength: 255,
+      unique: true
     },
-    subtitle: {
-      type: String,
-      trim: true,
-      required: true
+    episodeNumber: {
+      type: Number,
+      required: true,
+      min: 1,
+      max: 35
+    },
+    relatedShow: {
+      ref: Show,
+      type: mongoose.Schema.Types.ObjectId
+    },
+    relatedSeason: {
+      ref: Season,
+      type: mongoose.Schema.Types.ObjectId
     },
     description: {
       short: {
@@ -33,10 +44,6 @@ const ShowSchema = new mongoose.Schema(
         minlength: 1,
         maxlength: 1000
       }
-    },
-    startDate: {
-      type: Date,
-      default: Date.now()
     },
     image: {
       square: {
@@ -51,10 +58,6 @@ const ShowSchema = new mongoose.Schema(
     },
     trailerUri: {
       type: mongoose.SchemaTypes.Url
-    },
-    priority: {
-      type: Boolean,
-      default: false
     },
     votes: {
       type: [
@@ -81,31 +84,27 @@ const ShowSchema = new mongoose.Schema(
       type: String,
       trim: true,
       index: true,
-      set: excerpt,
-      unique: true
+      set: excerpt
     }
   },
-  { collection: "shows" }
+  { collection: "episodes", timestamps: true }
 );
 
-// require plugins
-ShowSchema.plugin(timestamps); // automatically adds createdAt and updatedAt timestamps
-
-ShowSchema.pre("findOneAndUpdate", function(next) {
+EpisodeSchema.pre("findOneAndUpdate", function(next) {
   const update = this.getUpdate();
 
   if (update.excerpt === undefined) {
-    this.update({}, { excerpt: excerpt(update.title) });
+    this.update({}, { excerpt: excerpt(update.espisodeName) });
   }
   next();
 });
 
-ShowSchema.pre("save", function(next) {
+EpisodeSchema.pre("save", function(next) {
   if (!this.excerpt) {
-    this.excerpt = excerpt(this.title);
+    this.excerpt = excerpt(this.espisodeName);
   }
 
   next();
 });
 
-module.exports = mongoose.model("Show", ShowSchema);
+module.exports = mongoose.model("Episode", EpisodeSchema);

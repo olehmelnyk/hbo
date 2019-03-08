@@ -1,33 +1,26 @@
 const mongoose = require("mongoose");
-const timestamps = require("mongoose-timestamp");
 
 const excerpt = require("../helpers/excerpt");
-require("mongoose-type-url");
 
 const User = require("./user");
-const Show = require("./show");
 
-const SeasonSchema = new mongoose.Schema(
+require("mongoose-type-url");
+
+const ShowSchema = new mongoose.Schema(
   {
-    seasonName: {
+    title: {
       type: String,
       trim: true,
       index: true,
+      unique: true,
       requred: true,
       minlength: 1,
-      maxlength: 255,
-      unique: true
+      maxlength: 255
     },
-    seasonNumber: {
-      type: Number,
+    subtitle: {
+      type: String,
       trim: true,
-      required: true,
-      min: 1,
-      max: 20
-    },
-    relatedShow: {
-      ref: Show,
-      type: mongoose.Schema.Types.ObjectId
+      required: true
     },
     description: {
       short: {
@@ -40,6 +33,10 @@ const SeasonSchema = new mongoose.Schema(
         minlength: 1,
         maxlength: 1000
       }
+    },
+    startDate: {
+      type: Date,
+      default: Date.now()
     },
     image: {
       square: {
@@ -54,6 +51,10 @@ const SeasonSchema = new mongoose.Schema(
     },
     trailerUri: {
       type: mongoose.SchemaTypes.Url
+    },
+    priority: {
+      type: Boolean,
+      default: false
     },
     votes: {
       type: [
@@ -80,31 +81,27 @@ const SeasonSchema = new mongoose.Schema(
       type: String,
       trim: true,
       index: true,
-      set: excerpt,
-      unique: true
+      set: excerpt
     }
   },
-  { collection: "seasons" }
+  { collection: "shows", timestamps: true }
 );
 
-// require plugins
-SeasonSchema.plugin(timestamps); // automatically adds createdAt and updatedAt timestamps
-
-SeasonSchema.pre("findOneAndUpdate", function(next) {
+ShowSchema.pre("findOneAndUpdate", function(next) {
   const update = this.getUpdate();
 
   if (update.excerpt === undefined) {
-    this.update({}, { excerpt: excerpt(update.seasonName) });
+    this.update({}, { excerpt: excerpt(update.title) });
   }
   next();
 });
 
-SeasonSchema.pre("save", function(next) {
+ShowSchema.pre("save", function(next) {
   if (!this.excerpt) {
-    this.excerpt = excerpt(this.seasonName);
+    this.excerpt = excerpt(this.title);
   }
 
   next();
 });
 
-module.exports = mongoose.model("Season", SeasonSchema);
+module.exports = mongoose.model("Show", ShowSchema);

@@ -14,17 +14,45 @@ router.get("/", (req, res, next) => {
   });
 });
 
+router.get("/featured", (req, res, next) => {
+  const _id = req.params.showId;
+  Show.find({ priority: true }, (error, shows) => {
+    if (error) {
+      console.error(error);
+      res.status(404).json(error.message);
+    }
+    res.status(200).json(shows);
+  });
+});
+
 /* public - get show by id */
 router.get("/:showId", (req, res, next) => {
   const _id = req.params.showId;
 
-  Show.findOne({ _id }, (error, show) => {
-    if (error) {
-      console.error(error);
+  Show.aggregate([
+    { $match: { excerpt: _id } },
+    {
+      $lookup: {
+        from: "seasons",
+        localField: "_id",
+        foreignField: "relatedShow",
+        as: "seasons"
+      }
+    },
+    {
+      $lookup: {
+        from: "episodes",
+        localField: "_id",
+        foreignField: "relatedShow",
+        as: "episodes"
+      }
     }
-
-    res.status(200).send(show);
-  });
+  ])
+    .exec()
+    .then(show => {
+      res.status(200).json(show[0]);
+    })
+    .catch(error => res.status(500).end());
 });
 
 /* protected method - create a new show */
@@ -54,11 +82,12 @@ router.post("/", (req, res, next) => {
     (error, show) => {
       if (error) {
         console.error(error);
+        throw new Error(error.message);
       }
 
       res.status(201).send(show);
     }
-  );
+  ).catch(error => console.log(error));
 });
 
 /* protected method - update show by id */

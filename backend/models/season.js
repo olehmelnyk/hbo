@@ -1,17 +1,14 @@
 const mongoose = require("mongoose");
-const timestamps = require("mongoose-timestamp");
 
 const excerpt = require("../helpers/excerpt");
-
 require("mongoose-type-url");
 
 const User = require("./user");
 const Show = require("./show");
-const Season = require("./season");
 
-const EpisodeSchema = new mongoose.Schema(
+const SeasonSchema = new mongoose.Schema(
   {
-    episodeName: {
+    seasonName: {
       type: String,
       trim: true,
       index: true,
@@ -20,19 +17,15 @@ const EpisodeSchema = new mongoose.Schema(
       maxlength: 255,
       unique: true
     },
-    episodeNumber: {
+    seasonNumber: {
       type: Number,
       trim: true,
       required: true,
       min: 1,
-      max: 35
+      max: 20
     },
     relatedShow: {
       ref: Show,
-      type: mongoose.Schema.Types.ObjectId
-    },
-    relatedSeason: {
-      ref: Season,
       type: mongoose.Schema.Types.ObjectId
     },
     description: {
@@ -86,31 +79,27 @@ const EpisodeSchema = new mongoose.Schema(
       type: String,
       trim: true,
       index: true,
-      set: excerpt,
-      unique: true
+      set: excerpt
     }
   },
-  { collection: "episodes" }
+  { collection: "seasons", timestamps: true }
 );
 
-// require plugins
-EpisodeSchema.plugin(timestamps); // automatically adds createdAt and updatedAt timestamps
-
-EpisodeSchema.pre("findOneAndUpdate", function(next) {
+SeasonSchema.pre("findOneAndUpdate", function(next) {
   const update = this.getUpdate();
 
   if (update.excerpt === undefined) {
-    this.update({}, { excerpt: excerpt(update.espisodeName) });
+    this.update({}, { excerpt: excerpt(update.seasonName) });
   }
   next();
 });
 
-EpisodeSchema.pre("save", function(next) {
+SeasonSchema.pre("save", function(next) {
   if (!this.excerpt) {
-    this.excerpt = excerpt(this.espisodeName);
+    this.excerpt = excerpt(this.seasonName);
   }
 
   next();
 });
 
-module.exports = mongoose.model("Episode", EpisodeSchema);
+module.exports = mongoose.model("Season", SeasonSchema);
