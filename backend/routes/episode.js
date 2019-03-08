@@ -16,9 +16,9 @@ router.get("/", (req, res, next) => {
 
 /* public - get show by id */
 router.get("/:episodeId", (req, res, next) => {
-  const _id = req.params.episodeId;
+  const id = req.params.episodeId;
 
-  Episode.findOne({ _id }, (error, episode) => {
+  Episode.findOne({ excerpt: id }, (error, episode) => {
     if (error) {
       console.error(error);
     }
@@ -63,7 +63,7 @@ router.post("/", (req, res, next) => {
 
 /* protected method - update show by id */
 router.put("/:episodeId", (req, res, next) => {
-  const _id = req.params.episodeId;
+  const id = req.params.episodeId;
   const {
     episodeName,
     episodeNumber,
@@ -76,7 +76,7 @@ router.put("/:episodeId", (req, res, next) => {
   } = req.fields;
 
   Episode.findOneAndUpdate(
-    { _id },
+    { excerpt: id },
     {
       episodeName,
       episodeNumber,
@@ -100,71 +100,15 @@ router.put("/:episodeId", (req, res, next) => {
 
 /* protected method - delete show by id */
 router.delete("/:episodeId", (req, res, next) => {
-  const _id = req.params.episodeId;
+  const excerpt = req.params.episodeId;
 
-  Episode.findOneAndDelete({ _id }, (error, episode) => {
+  Episode.findOneAndDelete({ excerpt }, (error, episode) => {
     if (error) {
       console.error(error);
     }
 
     res.status(200).send(episode);
   });
-});
-
-/* ================================
-  Rating - not implemented, yet
-==================================*/
-
-/* - protected method that will add user votes (for rating) */
-router.patch("/:episodeId/:uid/:vote", (req, res, next) => {
-  // const _id = req.params.showId;
-  // const vote = req.params.vote;
-  // const uid = req.body.uid; // we can get this data from the jwt token
-
-  // Season.findOne({ _id })
-  //   .select("+votes")
-  //   .exec()
-  //   .then(show => {
-  //     const votes = show.votes;
-  //     votes.push({
-  //       userId: uid,
-  //       vote: vote
-  //     });
-
-  //     if (votes.length < 5) {
-  //       res.status(200).json({ votes: "Not enouth votes..." });
-  //     } else {
-  //       const votesSum = votes.reduce((accum, curr) => accum + curr.vote, 0);
-  //       const average = Math.round(votesSum / votes.length);
-
-  //       // save in db
-
-  //       res.status(200).json({ votes: average });
-  //     }
-  //   });
-
-  res.status(501).send("Not implemented");
-});
-
-/* public method that will return show rating by showId */
-router.get("/:episodeId/vote", (req, res, nect) => {
-  const _id = req.params.episodeId;
-
-  Episode.findOne({ _id })
-    .select("+votes")
-    .exec()
-    .then(season => {
-      const votes = season.votes;
-      const votesLength = votes.length;
-
-      if (votesLength < 5) {
-        res.status(200).json({ votes: "Not enouth votes..." });
-      } else {
-        const votesSum = votes.reduce((accum, curr) => accum + curr.vote, 0);
-        const average = Math.round(votesSum / votesLength);
-        res.status(200).json({ votes: average });
-      }
-    });
 });
 
 module.exports = router;

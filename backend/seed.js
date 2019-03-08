@@ -159,7 +159,7 @@ Show.create(
     title: "Silicon Valley",
     subtitle: "Changing the way things change.",
     description: {
-      short: "short description",
+      short: "See genius in a whole new light.",
       long:
         "Watch HBO's hit show, Silicon Valley online or on air Sundays at 10pm. Catch up on full episodes, character bios and more for HBO's original comedy series about a computer programmer with a game-changing algorithm."
     },
