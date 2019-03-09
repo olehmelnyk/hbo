@@ -11,8 +11,6 @@ class EpisodeForm extends React.Component {
   onSubmit = async values => {
     const { show, season, episode } = this.props.match.params;
 
-    alert(JSON.stringify(values, null, 4));
-
     if (episode) {
       // edit
       fetch(`http://localhost:3001/api/v1/episode/${episode}`, {
@@ -91,7 +89,7 @@ class EpisodeForm extends React.Component {
           }
 
           this.setState({
-            episode
+            ...episode
           });
         })
         .catch(error => {
@@ -113,10 +111,8 @@ class EpisodeForm extends React.Component {
         }
 
         this.setState({
-          episode: {
-            relatedSeason: season._id,
-            relatedShow: season.relatedShow
-          }
+          relatedSeason: season._id,
+          relatedShow: season.relatedShow
         });
       })
       .catch(error => {
@@ -127,19 +123,15 @@ class EpisodeForm extends React.Component {
 
   render() {
     const {
-      episode: {
-        episodeName,
-        episodeNumber,
-        relatedShow,
-        relatedSeason,
-        description,
-        image,
-        trailerUri,
-        _id
-      }
+      episodeName,
+      episodeNumber,
+      relatedShow,
+      relatedSeason,
+      description,
+      image,
+      trailerUri,
+      _id
     } = this.state;
-
-    console.log(relatedShow, relatedSeason);
 
     return (
       <Paper

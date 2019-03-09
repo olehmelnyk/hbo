@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper, Typography } from "@material-ui/core";
+import { Paper, Typography, Link } from "@material-ui/core";
 
 class EpisodeList extends React.Component {
   state = {
@@ -27,19 +27,56 @@ class EpisodeList extends React.Component {
 
   render() {
     const { episodes } = this.state;
+    const { show, season } = this.props.match.params;
 
     return (
-      <Paper
-        style={{
-          margin: "24px auto",
-          padding: "24px",
-          maxWidth: 960
-        }}
-      >
-        <Typography>
-          <pre>{JSON.stringify(episodes, null, 4)}</pre>
-        </Typography>
-      </Paper>
+      <div>
+        <Paper
+          style={{
+            margin: "24px auto",
+            padding: "24px",
+            maxWidth: 960
+          }}
+        >
+          <Typography style={{ textTransform: "uppercase" }}>
+            <Link color="secondary" href="/admin">
+              {" "}
+              admin{" "}
+            </Link>{" "}
+            /{" "}
+            <Link color="secondary" href="/admin/show">
+              shows
+            </Link>{" "}
+            /{" "}
+            <Link color="secondary" href={`/admin/show/${show}`}>
+              {show}
+            </Link>{" "}
+            /{" "}
+            <Link color="secondary" href={`/admin/show/${show}/season`}>
+              seasons
+            </Link>{" "}
+            /{" "}
+            <Link
+              color="secondary"
+              href={`/admin/show/${show}/season/${season}`}
+            >
+              {season}
+            </Link>{" "}
+            / episodes
+          </Typography>
+        </Paper>
+        <Paper
+          style={{
+            margin: "24px auto",
+            padding: "24px",
+            maxWidth: 960
+          }}
+        >
+          <Typography>
+            <pre>{JSON.stringify(episodes, null, 4)}</pre>
+          </Typography>
+        </Paper>
+      </div>
     );
   }
 }
