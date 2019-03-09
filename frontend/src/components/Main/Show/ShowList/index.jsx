@@ -33,7 +33,13 @@ class ShowList extends React.Component {
 
     return (
       <div>
-        <Paper>
+        <Paper
+          style={{
+            margin: "24px auto",
+            padding: "24px",
+            maxWidth: 960
+          }}
+        >
           <Typography component="h1" variant="h4">
             Page that show list of all TV-shows (not just featured ones)
           </Typography>
@@ -41,14 +47,26 @@ class ShowList extends React.Component {
 
         {shows.length > 0 ? (
           shows.map(show => (
-            <Paper>
+            <Paper
+              style={{
+                margin: "24px auto",
+                padding: "24px",
+                maxWidth: 960
+              }}
+            >
               <Typography>
                 <pre>{JSON.stringify(show, null, 4)}</pre>
               </Typography>
             </Paper>
           ))
         ) : (
-          <Paper>
+          <Paper
+            style={{
+              margin: "24px auto",
+              padding: "24px",
+              maxWidth: 960
+            }}
+          >
             <Typography component="p" variant="caption">
               No shows - nothing to display :(
             </Typography>

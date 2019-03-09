@@ -1,30 +1,35 @@
 import React from "react";
 import { Paper, Typography } from "@material-ui/core";
 
-class ShowList extends React.Component {
+class SeasonDetails extends React.Component {
   state = {
-    shows: []
+    season: {}
   };
 
   componentDidMount() {
-    fetch("http://localhost:3001/api/v1/show")
+    const { season } = this.props.match.params;
+
+    fetch(`http://localhost:3001/api/v1/season/${season}`)
       .then(response => {
         if (response.status !== 200) {
           throw new Error(response.statusText);
         }
         return response.json();
       })
-      .then(shows => {
-        if (!Array.isArray(shows)) {
+      .then(season => {
+        if (!season._id) {
           throw new Error("Bad response from the server");
         }
-        this.setState({ shows });
+        this.setState({ season });
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log(error);
+        this.props.history.push("/page_not_found");
+      });
   }
 
   render() {
-    const { shows } = this.state;
+    const { season } = this.state;
 
     return (
       <Paper
@@ -34,15 +39,12 @@ class ShowList extends React.Component {
           maxWidth: 960
         }}
       >
-        <Typography component="h1" variant="h4">
-          Show list
-        </Typography>
         <Typography>
-          <pre>{JSON.stringify(shows, null, 4)}</pre>
+          <pre>{JSON.stringify(season, null, 4)}</pre>
         </Typography>
       </Paper>
     );
   }
 }
 
-export default ShowList;
+export default SeasonDetails;

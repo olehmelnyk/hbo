@@ -18,13 +18,30 @@ router.get("/", (req, res, next) => {
 router.get("/:seasonId", (req, res, next) => {
   const excerpt = req.params.seasonId;
 
-  Season.findOne({ excerpt }, (error, season) => {
-    if (error) {
-      console.error(error);
+  Season.aggregate([
+    { $match: { excerpt } },
+    {
+      $lookup: {
+        from: "shows",
+        localField: "relatedShow",
+        foreignField: "_id",
+        as: "show"
+      }
+    },
+    {
+      $lookup: {
+        from: "episodes",
+        localField: "_id",
+        foreignField: "relatedSeason",
+        as: "episodes"
+      }
     }
-
-    res.status(200).send(season);
-  });
+  ])
+    .exec()
+    .then(show => {
+      res.status(200).json(show[0]);
+    })
+    .catch(error => res.status(500).end());
 });
 
 /* protected method - create a new show */
@@ -86,12 +103,15 @@ router.put("/:seasonId", (req, res, next) => {
     { new: true },
     (error, season) => {
       if (error) {
-        console.error(error);
+        throw new Error(error);
       }
 
       res.status(200).send(season);
     }
-  );
+  ).catch(error => {
+    console.log(error);
+    res.status(500).send(error.message);
+  });
 });
 
 /* protected method - delete show by id */

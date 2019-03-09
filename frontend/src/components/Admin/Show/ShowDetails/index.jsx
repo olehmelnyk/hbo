@@ -1,8 +1,7 @@
 import React from "react";
 import { Paper, Typography } from "@material-ui/core";
 
-// const ShowItem = () => <div>show item</div>;
-class ShowItem extends React.Component {
+class ShowDetails extends React.Component {
   state = {
     show: {}
   };
@@ -33,7 +32,9 @@ class ShowItem extends React.Component {
     return (
       <Paper
         style={{
-          margin: "24px auto"
+          margin: "24px auto",
+          padding: "24px",
+          maxWidth: 960
         }}
       >
         <Typography component="h1" variant="h4">
@@ -47,4 +48,4 @@ class ShowItem extends React.Component {
   }
 }
 
-export default ShowItem;
+export default ShowDetails;

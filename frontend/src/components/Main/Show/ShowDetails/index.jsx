@@ -37,7 +37,13 @@ class ShowDetails extends React.Component {
     const { show } = this.state;
 
     return (
-      <Paper>
+      <Paper
+        style={{
+          margin: "24px auto",
+          padding: "24px",
+          maxWidth: 960
+        }}
+      >
         <Typography component="h1" variant="h4">
           {show.title}
         </Typography>

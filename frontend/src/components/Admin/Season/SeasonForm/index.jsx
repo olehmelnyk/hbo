@@ -1,24 +1,19 @@
 import React from "react";
 import { Form, Field } from "react-final-form";
-import { TextField, Checkbox } from "final-form-material-ui";
-import {
-  Typography,
-  Paper,
-  Grid,
-  Button,
-  FormControlLabel
-} from "@material-ui/core";
+import { TextField, Select } from "final-form-material-ui";
+import { Typography, Paper, Grid, Button, MenuItem } from "@material-ui/core";
 
-class ShowForm extends React.Component {
+class SeasonForm extends React.Component {
   state = {
-    show: {}
+    season: {}
   };
 
   onSubmit = async values => {
-    const excerpt = this.props.match.params.id;
-    if (excerpt) {
+    const { show, season } = this.props.match.params;
+
+    if (season) {
       // edit
-      fetch(`http://localhost:3001/api/v1/show/${excerpt}`, {
+      fetch(`http://localhost:3001/api/v1/season/${season}`, {
         method: "PUT",
         body: JSON.stringify(values),
         headers: new Headers({ "Content-type": "application/json" })
@@ -33,12 +28,12 @@ class ShowForm extends React.Component {
           if (!data._id) {
             throw new Error("Bad response");
           }
-          this.props.history.push("/admin/show");
+          this.props.history.push(`/admin/show/${show}/season`);
         })
         .catch(error => console.log(error));
     } else {
       // add
-      fetch("http://localhost:3001/api/v1/show", {
+      fetch("http://localhost:3001/api/v1/season", {
         method: "POST",
         body: JSON.stringify(values),
         headers: new Headers({ "Content-type": "application/json" })
@@ -53,7 +48,7 @@ class ShowForm extends React.Component {
           if (!data._id) {
             throw new Error("Bad response");
           }
-          this.props.history.push("/admin/show");
+          this.props.history.push(`/admin/show/${show}/season`);
         })
         .catch(error => {
           console.log(error);
@@ -63,23 +58,23 @@ class ShowForm extends React.Component {
 
   validate = values => {
     const errors = {};
-    if (!values.title) {
-      errors.title = "Required";
+    if (!values.seasonName) {
+      errors.seasonName = "Required";
     }
-    if (!values.subtitle) {
-      errors.subtitle = "Required";
+    if (!values.seasonNumber) {
+      errors.seasonNumber = "Required";
     }
-    if (!values.startDate) {
-      errors.startDate = "Required";
+    if (!values.relatedShow) {
+      errors.relatedShow = "Required";
     }
     return errors;
   };
 
   componentDidMount() {
-    const excerpt = this.props.match.params.id;
+    const excerpt = this.props.match.params.season;
 
     if (excerpt) {
-      fetch(`http://localhost:3001/api/v1/show/${excerpt}`)
+      fetch(`http://localhost:3001/api/v1/season/${excerpt}`)
         .then(response => {
           if (response.status !== 200) {
             throw new Error(response.statusText);
@@ -87,41 +82,52 @@ class ShowForm extends React.Component {
 
           return response.json();
         })
-        .then(show => {
-          if (!show._id) {
+        .then(season => {
+          if (!season._id) {
             throw new Error("Bad response from the server");
           }
 
-          if (show.startDate) {
-            show.startDate = show.startDate.slice(0, 10);
-          }
-
-          if (show.endDate) {
-            show.endDate = show.endDate.slice(0, 10);
-          }
-
-          this.setState({ show });
+          this.setState({ season });
         })
         .catch(error => {
           console.log(error);
           this.props.history.push("/page_not_found");
         });
     }
+
+    // get the list of all shows - we need _id and titles
+    fetch(`http://localhost:3001/api/v1/show`)
+      .then(response => {
+        if (response.status !== 200) {
+          throw new Error(response.statusText);
+        }
+
+        return response.json();
+      })
+      .then(shows => {
+        if (!Array.isArray(shows)) {
+          throw new Error("Bad response from the server");
+        }
+
+        this.setState({ shows: shows });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   render() {
     const {
-      show: {
-        title,
-        subtitle,
+      season: {
+        seasonName,
+        seasonNumber,
+        relatedShow,
         description,
         image,
-        startDate,
-        endDate,
         trailerUri,
-        priority,
         _id
-      }
+      },
+      shows
     } = this.state;
 
     return (
@@ -137,45 +143,63 @@ class ShowForm extends React.Component {
           variant="h4"
           style={{ marginBottom: "24px" }}
         >
-          {_id ? `Edit "${title}"` : "New Show"}
+          {_id ? `Edit "${seasonName}"` : "New Season"}
         </Typography>
 
         <Form
           onSubmit={this.onSubmit}
           initialValues={{
-            title,
-            subtitle,
+            seasonName,
+            seasonNumber,
+            relatedShow,
             description,
             image,
-            startDate,
-            endDate,
-            trailerUri,
-            priority
+            trailerUri
           }}
           validate={this.validate}
-          render={({ handleSubmit, reset, submitting, pristine, values }) => (
+          render={({ handleSubmit, submitting, pristine, values }) => (
             <form onSubmit={handleSubmit} noValidate autoComplete="off">
               <Grid container alignItems="flex-start" spacing={8}>
-                <Grid item xs={12}>
+                <Grid item xs={10}>
                   <Field
                     fullWidth
                     required
-                    name="title"
+                    name="seasonName"
                     component={TextField}
                     type="text"
-                    label="Title"
+                    label="Season name"
+                  />
+                </Grid>
+
+                <Grid item xs={2}>
+                  <Field
+                    fullWidth
+                    required
+                    name="seasonNumber"
+                    component={TextField}
+                    type="number"
+                    label="Season number"
+                    min={1}
+                    max={35}
+                    step={1}
                   />
                 </Grid>
 
                 <Grid item xs={12}>
                   <Field
                     fullWidth
-                    required
-                    name="subtitle"
-                    component={TextField}
-                    type="text"
-                    label="Subtitle"
-                  />
+                    name="relatedShow"
+                    component={Select}
+                    label="Related show"
+                    formControlProps={{ fullWidth: true }}
+                  >
+                    {shows &&
+                      shows.map(show => (
+                        <MenuItem value={show._id} key={show._id}>
+                          {show.title}
+                        </MenuItem>
+                      ))}
+                  </Field>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -197,35 +221,6 @@ class ShowForm extends React.Component {
                     type="text"
                     multiline
                     label="Long description"
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <Field
-                    fullWidth
-                    required
-                    name="startDate"
-                    component={TextField}
-                    type="date"
-                    label="Start date"
-                    title="Start date"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <Field
-                    fullWidth
-                    name="endDate"
-                    component={TextField}
-                    type="date"
-                    label="End date"
-                    title="End date"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
                   />
                 </Grid>
 
@@ -269,19 +264,6 @@ class ShowForm extends React.Component {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
-                  <FormControlLabel
-                    label="Featured"
-                    control={
-                      <Field
-                        name="priority"
-                        component={Checkbox}
-                        type="checkbox"
-                      />
-                    }
-                  />
-                </Grid>
-
                 <div
                   style={{
                     display: "flex",
@@ -316,4 +298,4 @@ class ShowForm extends React.Component {
   }
 }
 
-export default ShowForm;
+export default SeasonForm;

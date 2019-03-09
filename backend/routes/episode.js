@@ -18,13 +18,37 @@ router.get("/", (req, res, next) => {
 router.get("/:episodeId", (req, res, next) => {
   const id = req.params.episodeId;
 
-  Episode.findOne({ excerpt: id }, (error, episode) => {
-    if (error) {
-      console.error(error);
-    }
+  // Episode.findOne({ excerpt: id }, (error, episode) => {
+  //   if (error) {
+  //     console.error(error);
+  //   }
 
-    res.status(200).send(episode);
-  });
+  //   res.status(200).send(episode);
+  // });
+  Episode.aggregate([
+    { $match: { excerpt: id } },
+    {
+      $lookup: {
+        from: "shows",
+        localField: "relatedShow",
+        foreignField: "_id",
+        as: "show"
+      }
+    },
+    {
+      $lookup: {
+        from: "seasons",
+        localField: "relatedSeason",
+        foreignField: "_id",
+        as: "season"
+      }
+    }
+  ])
+    .exec()
+    .then(show => {
+      res.status(200).json(show[0]);
+    })
+    .catch(error => res.status(500).end());
 });
 
 /* protected method - create a new show */
