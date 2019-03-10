@@ -27,19 +27,43 @@ class SeasonList extends React.Component {
 
   render() {
     const { seasons } = this.state;
+    const { show } = this.props.match.params;
 
     return (
-      <Paper
-        style={{
-          margin: "24px auto",
-          padding: "24px",
-          maxWidth: 960
-        }}
-      >
-        <Typography>
-          <pre>{JSON.stringify(seasons, null, 4)}</pre>
-        </Typography>
-      </Paper>
+      <div style={{ maxWidth: "1200px", margin: "24px auto" }}>
+        {seasons.length > 0 &&
+          seasons
+            .sort((a, b) => a.seasonNumber - b.seasonNumber)
+            .map(season => (
+              <Paper
+                onClick={() =>
+                  this.props.history.push(
+                    `/admin/show/${show}/season/${season._id}`
+                  )
+                }
+              >
+                <img src={season.image.poster} alt={season.seasonName} />
+                <Typography>
+                  {season.seasonNumber}: {season.seasonName}
+                </Typography>
+                <Typography>{season.description}</Typography>
+              </Paper>
+            ))}
+
+        {/*
+        <Paper
+          style={{
+            margin: "24px auto",
+            padding: "24px",
+            maxWidth: 960
+          }}
+        >
+          <Typography>
+            <pre>{JSON.stringify(seasons, null, 4)}</pre>
+          </Typography>
+        </Paper>    
+            */}
+      </div>
     );
   }
 }

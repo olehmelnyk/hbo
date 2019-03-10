@@ -11,7 +11,7 @@ import {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    maxWidth: 1600,
+    maxWidth: 1200,
     margin: `${theme.spacing.unit * 3}px auto`
   },
   paper: {
@@ -64,7 +64,7 @@ class ShowDetails extends React.Component {
             variant="outlined"
             onClick={() => this.props.history.push("/admin/show")}
           >
-            Back
+            Show list
           </Button>
           <Button
             color="secondary"
@@ -86,14 +86,20 @@ class ShowDetails extends React.Component {
               />
             </Grid>
             <Grid item xs={8}>
-              <Typography component="h1" variant="headline">
+              <Typography component="h1" variant="h4">
                 {show.title}
               </Typography>
-              <Typography component="p" variant="subtitle1">
+              <Typography component="h2" variant="h5">
                 {show.subtitle}
               </Typography>
-              <Typography component="p" variant="caption">
-                {show.genres && show.genres.join(", ")}
+              <Typography
+                component="p"
+                variant="caption"
+                style={{
+                  margin: "16px 0"
+                }}
+              >
+                Genre: {show.genres && show.genres.join(", ")}
               </Typography>
 
               <div
@@ -105,24 +111,26 @@ class ShowDetails extends React.Component {
                   marginTop: "24px"
                 }}
               >
-                {show.seasons.map(season => (
-                  <Grid item xs={2}>
-                    <Paper
-                      onClick={() =>
-                        this.props.history.push(
-                          `/admin/show/${show.excerpt}/season/${season.excerpt}`
-                        )
-                      }
-                    >
-                      <img
-                        src={season.image.poster}
-                        alt={season.seasonName}
-                        style={{ width: "100%" }}
-                      />
-                      <Typography>{season.seasonName}</Typography>
-                    </Paper>
-                  </Grid>
-                ))}
+                {show.seasons
+                  .sort((a, b) => a.seasonNumber - b.seasonNumber)
+                  .map(season => (
+                    <Grid item xs={2}>
+                      <Paper
+                        onClick={() =>
+                          this.props.history.push(
+                            `/admin/show/${show.excerpt}/season/${season._id}`
+                          )
+                        }
+                      >
+                        <img
+                          src={season.image.poster}
+                          alt={season.seasonName}
+                          style={{ width: "100%" }}
+                        />
+                        <Typography>{season.seasonName}</Typography>
+                      </Paper>
+                    </Grid>
+                  ))}
               </div>
             </Grid>
           </Grid>

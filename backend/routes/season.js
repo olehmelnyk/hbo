@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
+const mongoose = require("mongoose");
 const Season = require("../models/season");
 
 /* public - get all seasons - returns array with seasons */
@@ -16,10 +16,11 @@ router.get("/", (req, res, next) => {
 
 /* public - get show by id */
 router.get("/:seasonId", (req, res, next) => {
-  const excerpt = req.params.seasonId;
+  const _id = req.params.seasonId;
+  const ObjectId = mongoose.Types.ObjectId;
 
   Season.aggregate([
-    { $match: { excerpt } },
+    { $match: { _id: ObjectId(_id) } },
     {
       $lookup: {
         from: "shows",
@@ -38,8 +39,8 @@ router.get("/:seasonId", (req, res, next) => {
     }
   ])
     .exec()
-    .then(show => {
-      res.status(200).json(show[0]);
+    .then(season => {
+      res.status(200).json(season[0]);
     })
     .catch(error => res.status(500).end());
 });
@@ -57,10 +58,10 @@ router.post("/", (req, res, next) => {
 
 /* protected method - update show by id */
 router.put("/:seasonId", (req, res, next) => {
-  const id = req.params.seasonId;
+  const _id = req.params.seasonId;
 
   Season.findOneAndUpdate(
-    { excerpt: id },
+    { _id },
     { ...req.fields },
     { new: true },
     (error, season) => {
@@ -78,9 +79,9 @@ router.put("/:seasonId", (req, res, next) => {
 
 /* protected method - delete show by id */
 router.delete("/:seasonId", (req, res, next) => {
-  const excerpt = req.params.seasonId;
+  const _id = req.params.seasonId;
 
-  Season.findOneAndDelete({ excerpt }, (error, season) => {
+  Season.findOneAndDelete({ _id }, (error, season) => {
     if (error) {
       console.error(error);
     }

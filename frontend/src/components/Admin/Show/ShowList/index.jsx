@@ -13,7 +13,12 @@ import {
 
 const styles = {
   card: {
-    maxWidth: 260
+    maxWidth: 260,
+    zoom: 0.76,
+    transition: "all .5s ease",
+    "&:hover": {
+      transform: "scale(1.05)"
+    }
   },
   media: {
     height: 390,
@@ -48,7 +53,7 @@ class ShowList extends React.Component {
     const { shows } = this.state;
 
     return (
-      <div style={{ margin: "24px auto", padding: "24px", maxWidth: 1600 }}>
+      <div style={{ margin: "24px auto", maxWidth: 1200 }}>
         <div style={{ margin: "24px", display: "block" }}>
           <Button
             color="secondary"
@@ -63,7 +68,7 @@ class ShowList extends React.Component {
         <div
           style={{
             display: "flex",
-            justifyContent: "space-around",
+            justifyContent: "space-between",
             alignItems: "start",
             flexWrap: "wrap"
           }}

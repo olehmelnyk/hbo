@@ -35,13 +35,49 @@ class EpisodeDetails extends React.Component {
       <Paper
         style={{
           margin: "24px auto",
-          padding: "24px",
-          maxWidth: 960
+          maxWidth: 1200
         }}
       >
+        {episode._id && (
+          <div>
+            <img
+              src={episode.image.still}
+              alt={episode.episodeName}
+              style={{
+                width: "100%"
+              }}
+            />
+            <div
+              style={{
+                padding: "24px"
+              }}
+            >
+              <Typography>
+                {episode.show[0].title}: S{episode.episodeNumber}E
+                {episode.episodeNumber}
+              </Typography>
+              <Typography
+                component="h1"
+                variant="h4"
+                style={{ marginTop: "24px" }}
+              >
+                {episode.episodeNumber}: {episode.episodeName}
+              </Typography>
+              <Typography component="h2" variant="h5">
+                {episode.description}
+              </Typography>
+              <Typography align="right">
+                Air date: {new Date(episode.airDate).toLocaleDateString()}
+              </Typography>
+            </div>
+          </div>
+        )}
+
+        {/*
         <Typography>
           <pre>{JSON.stringify(episode, null, 4)}</pre>
         </Typography>
+        */}
       </Paper>
     );
   }
