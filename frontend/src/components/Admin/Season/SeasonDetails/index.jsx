@@ -78,18 +78,32 @@ class SeasonDetails extends React.Component {
                 <Typography compontent="h2" variant="h5">
                   {season.show[0].subtitle}
                 </Typography>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={() =>
-                    this.props.history.push(
-                      `/admin/show/${show}/season/${season._id}/edit`
-                    )
-                  }
-                  style={{ marginTop: "24px" }}
-                >
-                  Edit season
-                </Button>
+                <div>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() =>
+                      this.props.history.push(
+                        `/admin/show/${show}/season/${season._id}/edit`
+                      )
+                    }
+                    style={{ margin: "24px 24px 0 0" }}
+                  >
+                    Edit season
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    onClick={() =>
+                      this.props.history.push(
+                        `/admin/show/${show}/season/${season._id}/episode/add`
+                      )
+                    }
+                    style={{ marginTop: "24px" }}
+                  >
+                    New Episode
+                  </Button>
+                </div>
               </Grid>
             </Grid>
 

@@ -66,15 +66,29 @@ class ShowDetails extends React.Component {
           >
             Show list
           </Button>
-          <Button
-            color="secondary"
-            variant="outlined"
-            onClick={() =>
-              this.props.history.push(`/admin/show/${show.excerpt}/edit`)
-            }
-          >
-            Edit
-          </Button>
+          <div>
+            <Button
+              color="secondary"
+              variant="outlined"
+              onClick={() =>
+                this.props.history.push(
+                  `/admin/show/${show.excerpt}/season/add`
+                )
+              }
+              style={{ marginRight: "24px" }}
+            >
+              New season
+            </Button>
+            <Button
+              color="secondary"
+              variant="outlined"
+              onClick={() =>
+                this.props.history.push(`/admin/show/${show.excerpt}/edit`)
+              }
+            >
+              Edit
+            </Button>
+          </div>
         </div>
         {show._id && (
           <Grid container spacing={24}>
