@@ -1,5 +1,25 @@
 import React from "react";
-import { Paper, Typography } from "@material-ui/core";
+import {
+  withStyles,
+  Paper,
+  Typography,
+  Card,
+  CardActionArea,
+  CardActions,
+  CardContent,
+  CardMedia,
+  Button
+} from "@material-ui/core";
+
+const styles = {
+  card: {
+    maxWidth: 260
+  },
+  media: {
+    height: 390,
+    width: 260
+  }
+};
 
 class ShowList extends React.Component {
   state = {
@@ -24,9 +44,58 @@ class ShowList extends React.Component {
   }
 
   render() {
+    const { classes } = this.props;
     const { shows } = this.state;
 
     return (
+      <div style={{ margin: "24px auto", padding: "24px", maxWidth: 1600 }}>
+        <div style={{ margin: "24px", display: "block" }}>
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={() => this.props.history.push("/admin/show/add")}
+            fullWidth
+          >
+            Add new show
+          </Button>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-around",
+            alignItems: "start",
+            flexWrap: "wrap"
+          }}
+        >
+          {shows.length > 1 ? (
+            shows.map(show => (
+              <Card
+                className={classes.card}
+                style={{ margin: "24px" }}
+                onClick={() =>
+                  this.props.history.push(`/admin/show/${show.excerpt}`)
+                }
+              >
+                <CardActionArea>
+                  <CardMedia
+                    className={classes.media}
+                    image={show.image.poster}
+                    title={show.title}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                      {show.title}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            ))
+          ) : (
+            <Typography>"No shows in DB"</Typography>
+          )}
+
+          {/*
       <Paper
         style={{
           margin: "24px auto",
@@ -41,8 +110,11 @@ class ShowList extends React.Component {
           <pre>{JSON.stringify(shows, null, 4)}</pre>
         </Typography>
       </Paper>
+      */}
+        </div>
+      </div>
     );
   }
 }
 
-export default ShowList;
+export default withStyles(styles)(ShowList);
