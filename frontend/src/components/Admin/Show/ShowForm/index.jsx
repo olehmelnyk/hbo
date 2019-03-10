@@ -219,7 +219,11 @@ class ShowForm extends React.Component {
                     name="image.still"
                     component={TextField}
                     type="url"
-                    label="Still image"
+                    label="Start date"
+                    title="Start date"
+                    InputLabelProps={{
+                      shrink: true
+                    }}
                   />
                 </Grid>
 
