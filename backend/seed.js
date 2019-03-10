@@ -7,6 +7,7 @@ const Episode = require("./models/episode");
 mongoose.connection.dropDatabase(() => console.log("Seed data applied ✔"));
 
 // Game of Thrones
+/*
 Show.create(
   {
     title: "Game of Thrones",
@@ -152,7 +153,7 @@ season 8
     5
     6
 */
-
+/*
 // Silicon Valley
 Show.create(
   {
@@ -265,3 +266,4 @@ Show.create(
     );
   }
 );
+*/

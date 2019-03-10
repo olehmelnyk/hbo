@@ -53,64 +53,22 @@ router.get("/:episodeId", (req, res, next) => {
 
 /* protected method - create a new show */
 router.post("/", (req, res, next) => {
-  const {
-    episodeName,
-    episodeNumber,
-    relatedShow,
-    relatedSeason,
-    description,
-    image,
-    trailerUri,
-    excerpt
-  } = req.fields;
-
-  Episode.create(
-    {
-      episodeName,
-      episodeNumber,
-      relatedShow,
-      relatedSeason,
-      description,
-      image,
-      trailerUri,
-      excerpt
-    },
-    (error, v) => {
-      if (error) {
-        console.error(error);
-      }
-
-      res.status(201).send(v);
+  Episode.create(req.fields, (error, v) => {
+    if (error) {
+      console.error(error);
     }
-  );
+
+    res.status(201).send(v);
+  });
 });
 
 /* protected method - update show by id */
 router.put("/:episodeId", (req, res, next) => {
   const id = req.params.episodeId;
-  const {
-    episodeName,
-    episodeNumber,
-    relatedShow,
-    relatedSeason,
-    description,
-    image,
-    trailerUri,
-    excerpt
-  } = req.fields;
 
   Episode.findOneAndUpdate(
     { excerpt: id },
-    {
-      episodeName,
-      episodeNumber,
-      relatedShow,
-      relatedSeason,
-      description,
-      image,
-      trailerUri,
-      excerpt
-    },
+    req.fields,
     { new: true },
     (error, episode) => {
       if (error) {

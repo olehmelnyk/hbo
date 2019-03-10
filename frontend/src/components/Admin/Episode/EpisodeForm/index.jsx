@@ -88,6 +88,10 @@ class EpisodeForm extends React.Component {
             throw new Error("Bad response from the server");
           }
 
+          if (episode.airDate) {
+            episode.airDate = episode.airDate.slice(0, 10);
+          }
+
           this.setState({
             ...episode
           });
@@ -130,6 +134,7 @@ class EpisodeForm extends React.Component {
       description,
       image,
       trailerUri,
+      airDate,
       _id
     } = this.state;
 
@@ -158,7 +163,8 @@ class EpisodeForm extends React.Component {
             relatedSeason,
             description,
             image,
-            trailerUri
+            trailerUri,
+            airDate
           }}
           validate={this.validate}
           render={({ handleSubmit, submitting, pristine, values }) => (
@@ -192,22 +198,41 @@ class EpisodeForm extends React.Component {
                 <Grid item xs={12}>
                   <Field
                     fullWidth
-                    name="description.short"
+                    name="description"
                     component={TextField}
                     type="text"
                     multiline
-                    label="Short description"
+                    label="Description"
                   />
                 </Grid>
 
                 <Grid item xs={12}>
                   <Field
                     fullWidth
-                    name="description.long"
+                    name="image.poster"
                     component={TextField}
-                    type="text"
-                    multiline
-                    label="Long description"
+                    type="url"
+                    label="Poster image"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Field
+                    fullWidth
+                    name="image.backdrop"
+                    component={TextField}
+                    type="url"
+                    label="Backdrop image"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Field
+                    fullWidth
+                    name="image.still"
+                    component={TextField}
+                    type="url"
+                    label="Still image"
                   />
                 </Grid>
 
@@ -224,30 +249,14 @@ class EpisodeForm extends React.Component {
                 <Grid item xs={12}>
                   <Field
                     fullWidth
-                    name="image.square"
+                    required
+                    name="airDate"
                     component={TextField}
-                    type="url"
-                    label="Square image URL"
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    name="image.wide"
-                    component={TextField}
-                    type="url"
-                    label="Wide image URL"
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    name="image.extraWide"
-                    component={TextField}
-                    type="url"
-                    label="Extra wide image URL"
+                    type="date"
+                    label="Air date"
+                    InputLabelProps={{
+                      shrink: true
+                    }}
                   />
                 </Grid>
 

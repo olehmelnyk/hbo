@@ -87,6 +87,10 @@ class SeasonForm extends React.Component {
             throw new Error("Bad response from the server");
           }
 
+          if (season.airDate) {
+            season.airDate = season.airDate.slice(0, 10);
+          }
+
           this.setState({ season });
         })
         .catch(error => {
@@ -109,7 +113,7 @@ class SeasonForm extends React.Component {
           throw new Error("Bad response from the server");
         }
 
-        this.setState({ shows: shows });
+        this.setState({ shows });
       })
       .catch(error => {
         console.log(error);
@@ -125,6 +129,7 @@ class SeasonForm extends React.Component {
         description,
         image,
         trailerUri,
+        airDate,
         _id
       },
       shows
@@ -154,7 +159,8 @@ class SeasonForm extends React.Component {
             relatedShow,
             description,
             image,
-            trailerUri
+            trailerUri,
+            airDate
           }}
           validate={this.validate}
           render={({ handleSubmit, submitting, pristine, values }) => (
@@ -185,7 +191,7 @@ class SeasonForm extends React.Component {
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={8}>
                   <Field
                     fullWidth
                     name="relatedShow"
@@ -202,25 +208,58 @@ class SeasonForm extends React.Component {
                   </Field>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={4}>
                   <Field
                     fullWidth
-                    name="description.short"
+                    required
+                    name="airDate"
                     component={TextField}
-                    type="text"
-                    multiline
-                    label="Short description"
+                    type="date"
+                    label="Air date"
+                    InputLabelProps={{
+                      shrink: true
+                    }}
                   />
                 </Grid>
 
                 <Grid item xs={12}>
                   <Field
                     fullWidth
-                    name="description.long"
+                    name="description"
                     component={TextField}
                     type="text"
                     multiline
-                    label="Long description"
+                    label="Description"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Field
+                    fullWidth
+                    name="image.poster"
+                    component={TextField}
+                    type="url"
+                    label="Poster image"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Field
+                    fullWidth
+                    name="image.backdrop"
+                    component={TextField}
+                    type="url"
+                    label="Backdrop image"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Field
+                    fullWidth
+                    name="image.still"
+                    component={TextField}
+                    type="url"
+                    label="Still image"
                   />
                 </Grid>
 
@@ -231,36 +270,6 @@ class SeasonForm extends React.Component {
                     component={TextField}
                     type="url"
                     label="Trailer video URL"
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    name="image.square"
-                    component={TextField}
-                    type="url"
-                    label="Square image URL"
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    name="image.wide"
-                    component={TextField}
-                    type="url"
-                    label="Wide image URL"
-                  />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Field
-                    fullWidth
-                    name="image.extraWide"
-                    component={TextField}
-                    type="url"
-                    label="Extra wide image URL"
                   />
                 </Grid>
 

@@ -16,8 +16,3 @@ mongoose
       console.error("Connection to MongoDB failed", err);
     }
   );
-
-/**/
-// mongoose.connection.collections["shows"].drop(function(err) {
-//   console.log("collection dropped");
-// });

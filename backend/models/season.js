@@ -29,51 +29,27 @@ const SeasonSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId
     },
     description: {
-      short: {
-        type: String,
-        minlength: 1,
-        maxlength: 255
-      },
-      long: {
-        type: String,
-        minlength: 1,
-        maxlength: 1000
-      }
+      type: String,
+      trim: true,
+      minlength: 0,
+      maxlength: 1000
     },
     image: {
-      square: {
+      poster: {
         type: mongoose.SchemaTypes.Url
       },
-      wide: {
+      backdrop: {
         type: mongoose.SchemaTypes.Url
       },
-      extraWide: {
+      still: {
         type: mongoose.SchemaTypes.Url
       }
     },
     trailerUri: {
       type: mongoose.SchemaTypes.Url
     },
-    votes: {
-      type: [
-        {
-          userId: {
-            ref: User,
-            type: mongoose.Schema.Types.ObjectId
-          },
-          vote: {
-            type: Number,
-            min: 1,
-            max: 5
-          }
-        }
-      ],
-      select: false
-    },
-    rating: {
-      type: Number,
-      min: 1,
-      max: 5
+    airDate: {
+      type: Date
     },
     excerpt: {
       type: String,

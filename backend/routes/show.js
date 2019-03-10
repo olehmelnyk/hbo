@@ -57,75 +57,33 @@ router.get("/:showId", (req, res, next) => {
 
 /* protected method - create a new show */
 router.post("/", (req, res, next) => {
-  const {
-    title,
-    subtitle,
-    startDate,
-    image,
-    description,
-    priority,
-    trailerUri,
-    excerpt
-  } = req.fields;
-
-  Show.create(
-    {
-      title,
-      subtitle,
-      startDate,
-      image,
-      description,
-      priority,
-      trailerUri,
-      excerpt
-    },
-    (error, show) => {
-      if (error) {
-        res.status(400).json(error.message);
-        throw new Error(error.message);
-      }
-
-      res.status(201).send(show);
+  Show.create(req.fields, (error, show) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send(error);
     }
-  ).catch(error => console.log(error));
+
+    res.status(201).send(show);
+  });
 });
 
 /* protected method - update show by id */
 router.put("/:showId", (req, res, next) => {
   const id = req.params.showId;
-  const {
-    title,
-    subtitle,
-    startDate,
-    image,
-    description,
-    priority,
-    trailerUri,
-    excerpt
-  } = req.fields;
 
   Show.findOneAndUpdate(
     { excerpt: id },
-    {
-      title,
-      subtitle,
-      startDate,
-      image,
-      description,
-      priority,
-      trailerUri,
-      excerpt
-    },
+    req.fields,
     { new: true },
     (error, show) => {
       if (error) {
+        console.log(error);
         res.status(400).json(error.message);
-        throw new Error(error.message);
       }
 
       res.status(200).send(show);
     }
-  ).catch(error => console.log(error));
+  );
 });
 
 /* protected method - delete show by id */

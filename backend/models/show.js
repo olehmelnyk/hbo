@@ -22,60 +22,55 @@ const ShowSchema = new mongoose.Schema(
       trim: true,
       required: true
     },
-    description: {
-      short: {
-        type: String,
-        minlength: 1,
-        maxlength: 255
-      },
-      long: {
-        type: String,
-        minlength: 1,
-        maxlength: 1000
-      }
-    },
-    startDate: {
+    firstAirDate: {
       type: Date,
       default: Date.now()
     },
+    lastAirDate: {
+      type: Date
+    },
+    episodeRunTime: {
+      type: Number
+    },
     image: {
-      square: {
+      poster: {
         type: mongoose.SchemaTypes.Url
       },
-      wide: {
+      backdrop: {
         type: mongoose.SchemaTypes.Url
       },
-      extraWide: {
+      still: {
         type: mongoose.SchemaTypes.Url
       }
     },
-    trailerUri: {
+    video: {
       type: mongoose.SchemaTypes.Url
+    },
+    numberOfSeasons: {
+      type: Number,
+      default: 1,
+      min: 1,
+      max: 35
+    },
+    numberOfEpisodes: {
+      type: Number,
+      default: 1
+    },
+    status: {
+      type: String,
+      default: "Returning Series",
+      trim: true
+    },
+    inProduction: {
+      type: Boolean,
+      default: true
+    },
+    genres: {
+      type: Array
     },
     priority: {
       type: Boolean,
       default: false
-    },
-    votes: {
-      type: [
-        {
-          userId: {
-            ref: User,
-            type: mongoose.Schema.Types.ObjectId
-          },
-          vote: {
-            type: Number,
-            min: 1,
-            max: 5
-          }
-        }
-      ],
-      select: false
-    },
-    rating: {
-      type: Number,
-      min: 1,
-      max: 5
     },
     excerpt: {
       type: String,

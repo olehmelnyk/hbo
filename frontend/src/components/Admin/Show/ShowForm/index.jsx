@@ -15,7 +15,10 @@ class ShowForm extends React.Component {
   };
 
   onSubmit = async values => {
+    values.genres = values.genres.split(",");
+
     const excerpt = this.props.match.params.id;
+
     if (excerpt) {
       // edit
       fetch(`http://localhost:3001/api/v1/show/${excerpt}`, {
@@ -69,8 +72,8 @@ class ShowForm extends React.Component {
     if (!values.subtitle) {
       errors.subtitle = "Required";
     }
-    if (!values.startDate) {
-      errors.startDate = "Required";
+    if (!values.firstAirDate) {
+      errors.firstAirDate = "Required";
     }
     return errors;
   };
@@ -92,13 +95,15 @@ class ShowForm extends React.Component {
             throw new Error("Bad response from the server");
           }
 
-          if (show.startDate) {
-            show.startDate = show.startDate.slice(0, 10);
+          if (show.firstAirDate) {
+            show.firstAirDate = show.firstAirDate.slice(0, 10);
           }
 
-          if (show.endDate) {
-            show.endDate = show.endDate.slice(0, 10);
+          if (show.lastAirDate) {
+            show.lastAirDate = show.lastAirDate.slice(0, 10);
           }
+
+          show.genres = show.genres.join(", ");
 
           this.setState({ show });
         })
@@ -114,12 +119,17 @@ class ShowForm extends React.Component {
       show: {
         title,
         subtitle,
-        description,
         image,
-        startDate,
-        endDate,
+        firstAirDate,
+        lastAirDate,
         trailerUri,
         priority,
+        episodeRunTime,
+        numberOfSeasons,
+        numberOfEpisodes,
+        status,
+        inProduction,
+        genres,
         _id
       }
     } = this.state;
@@ -145,12 +155,17 @@ class ShowForm extends React.Component {
           initialValues={{
             title,
             subtitle,
-            description,
             image,
-            startDate,
-            endDate,
+            firstAirDate,
+            lastAirDate,
             trailerUri,
-            priority
+            priority,
+            episodeRunTime,
+            numberOfSeasons,
+            numberOfEpisodes,
+            status,
+            inProduction,
+            genres
           }}
           validate={this.validate}
           render={({ handleSubmit, reset, submitting, pristine, values }) => (
@@ -181,51 +196,30 @@ class ShowForm extends React.Component {
                 <Grid item xs={12}>
                   <Field
                     fullWidth
-                    name="description.short"
+                    name="image.poster"
                     component={TextField}
-                    type="text"
-                    multiline
-                    label="Short description"
+                    type="url"
+                    label="Poster image"
                   />
                 </Grid>
 
                 <Grid item xs={12}>
                   <Field
                     fullWidth
-                    name="description.long"
+                    name="image.backdrop"
                     component={TextField}
-                    type="text"
-                    multiline
-                    label="Long description"
+                    type="url"
+                    label="Backdrop image"
                   />
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                   <Field
                     fullWidth
-                    required
-                    name="startDate"
+                    name="image.still"
                     component={TextField}
-                    type="date"
-                    label="Start date"
-                    title="Start date"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                  />
-                </Grid>
-
-                <Grid item xs={6}>
-                  <Field
-                    fullWidth
-                    name="endDate"
-                    component={TextField}
-                    type="date"
-                    label="End date"
-                    title="End date"
-                    InputLabelProps={{
-                      shrink: true
-                    }}
+                    type="url"
+                    label="Still image"
                   />
                 </Grid>
 
@@ -242,39 +236,99 @@ class ShowForm extends React.Component {
                 <Grid item xs={12}>
                   <Field
                     fullWidth
-                    name="image.square"
+                    name="genres"
                     component={TextField}
-                    type="url"
-                    label="Square image URL"
+                    type="text"
+                    label="Genres"
+                  />
+                </Grid>
+
+                <Grid item xs={2}>
+                  <Field
+                    fullWidth
+                    name="episodeRunTime"
+                    component={TextField}
+                    type="text"
+                    label="Episode run time"
+                  />
+                </Grid>
+
+                <Grid item xs={5}>
+                  <Field
+                    fullWidth
+                    name="numberOfSeasons"
+                    component={TextField}
+                    type="number"
+                    label="Number of Seasons"
+                  />
+                </Grid>
+
+                <Grid item xs={5}>
+                  <Field
+                    fullWidth
+                    name="numberOfEpisodes"
+                    component={TextField}
+                    type="numberOfEpisodes"
+                    label="Number of Episodes"
                   />
                 </Grid>
 
                 <Grid item xs={12}>
                   <Field
                     fullWidth
-                    name="image.wide"
+                    name="status"
                     component={TextField}
-                    type="url"
-                    label="Wide image URL"
+                    type="text"
+                    label="Status"
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <Field
                     fullWidth
-                    name="image.extraWide"
+                    required
+                    name="firstAirDate"
                     component={TextField}
-                    type="url"
-                    label="Extra wide image URL"
+                    type="date"
+                    label="First aired date"
+                    InputLabelProps={{
+                      shrink: true
+                    }}
                   />
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={6}>
+                  <Field
+                    fullWidth
+                    name="lastAirDate"
+                    component={TextField}
+                    type="date"
+                    label="Last aired date"
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
                   <FormControlLabel
                     label="Featured"
                     control={
                       <Field
                         name="priority"
+                        component={Checkbox}
+                        type="checkbox"
+                      />
+                    }
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <FormControlLabel
+                    label="In Production"
+                    control={
+                      <Field
+                        name="inProduction"
                         component={Checkbox}
                         type="checkbox"
                       />
