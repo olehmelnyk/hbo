@@ -1,0 +1,3 @@
+- landing page, registration/auth pages, nav bar
+- move all styles to separate files
+- code cleanup and refactroing 😅

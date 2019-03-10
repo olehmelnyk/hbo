@@ -10,17 +10,9 @@
     "pull": "git pull origin master --rebase --autostash",
     "upd": "npm run pull && cd frontend && npm i && cd ../backend && npm i && cd .. && npm start"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/olehmelnyk/hbo.git"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/olehmelnyk/hbo/issues"
-  },
-  "homepage": "https://github.com/olehmelnyk/hbo#readme",
   "dependencies": {
     "concurrently": "^4.1.0"
   }

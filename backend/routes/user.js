@@ -29,9 +29,7 @@ router.get("/:id", (req, res, next) => {
 
 /* create a new user */
 router.post("/", (req, res, next) => {
-  const { email, username, password, admin } = req.body;
-
-  User.create({ email, username, password, admin }, (error, user) => {
+  User.create(req.fields, (error, user) => {
     if (error) {
       console.error(error);
     }
@@ -43,20 +41,14 @@ router.post("/", (req, res, next) => {
 /* update user by id */
 router.put("/:id", (req, res, next) => {
   const _id = req.params.id;
-  const { email, username, password, admin } = req.body;
 
-  User.findOneAndUpdate(
-    { _id },
-    { email, username, password, admin },
-    { new: true },
-    (error, user) => {
-      if (error) {
-        console.error(error);
-      }
-
-      res.status(200).send(user);
+  User.findOneAndUpdate({ _id }, req.fields, { new: true }, (error, user) => {
+    if (error) {
+      console.error(error);
     }
-  );
+
+    res.status(200).send(user);
+  });
 });
 
 /* delete user by id */
