@@ -165,7 +165,7 @@ class SeasonForm extends React.Component {
           validate={this.validate}
           render={({ handleSubmit, submitting, pristine, values }) => (
             <form onSubmit={handleSubmit} noValidate autoComplete="off">
-              <Grid container alignItems="flex-start" spacing={8}>
+              <Grid container alignItems="flex-start" spacing={24}>
                 <Grid item xs={10}>
                   <Field
                     fullWidth

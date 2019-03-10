@@ -92,29 +92,47 @@ class ShowDetails extends React.Component {
               <Typography component="h2" variant="h5">
                 {show.subtitle}
               </Typography>
-              <Typography
-                component="p"
-                variant="caption"
-                style={{
-                  margin: "16px 0"
-                }}
-              >
-                Genre: {show.genres && show.genres.join(", ")}
-              </Typography>
 
               <div
                 style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  justifyContent: "space-around",
-                  alignItems: "start",
+                  marginTop: "16px"
+                }}
+              >
+                <Typography component="p" variant="caption">
+                  {new Date(show.firstAirDate).getFullYear()} -{" "}
+                  {show.inProduction
+                    ? "..."
+                    : new Date(show.lastAirDate).getFullYear()}{" "}
+                  ({show.status})
+                </Typography>
+                <Typography component="p">
+                  Seasons / episodes: {show.numberOfSeasons} /{" "}
+                  {show.numberOfEpisodes}
+                </Typography>
+                <Typography component="p">
+                  Run time: {show.episodeRunTime}m
+                </Typography>
+                <Typography component="p">
+                  Genre: {show.genres && show.genres.join(", ")}
+                </Typography>
+              </div>
+
+              <div
+                style={{
                   marginTop: "24px"
                 }}
               >
                 {show.seasons
                   .sort((a, b) => a.seasonNumber - b.seasonNumber)
                   .map(season => (
-                    <Grid item xs={2}>
+                    <Grid
+                      item
+                      xs={2}
+                      style={{
+                        float: "left",
+                        margin: "0 24px 24px 0"
+                      }}
+                    >
                       <Paper
                         onClick={() =>
                           this.props.history.push(
@@ -125,9 +143,14 @@ class ShowDetails extends React.Component {
                         <img
                           src={season.image.poster}
                           alt={season.seasonName}
-                          style={{ width: "100%" }}
+                          style={{ width: "100%", height: "200px" }}
                         />
-                        <Typography>{season.seasonName}</Typography>
+                        <Typography
+                          variant="caption"
+                          style={{ padding: "8px" }}
+                        >
+                          {season.seasonName}
+                        </Typography>
                       </Paper>
                     </Grid>
                   ))}
@@ -136,6 +159,7 @@ class ShowDetails extends React.Component {
           </Grid>
         )}
 
+        {/*
         <Paper
           style={{
             margin: "24px auto",
@@ -150,6 +174,7 @@ class ShowDetails extends React.Component {
             <pre>{JSON.stringify(show, null, 4)}</pre>
           </Typography>
         </Paper>
+        */}
       </div>
     );
   }

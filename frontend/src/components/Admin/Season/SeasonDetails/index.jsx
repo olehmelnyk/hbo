@@ -1,5 +1,5 @@
 import React from "react";
-import { Paper, Typography } from "@material-ui/core";
+import { Paper, Typography, Button, Grid } from "@material-ui/core";
 
 class SeasonDetails extends React.Component {
   state = {
@@ -39,18 +39,70 @@ class SeasonDetails extends React.Component {
           margin: "24px auto"
         }}
       >
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={() => this.props.history.goBack()}
+        >
+          Back
+        </Button>
+
         {season._id && (
-          <div>
-            <div>
-              <img src={season.image.poster} alt={season.seasonName} />
-              <Typography compontent="h1" variant="h4">
-                {season.show[0].title} - {season.seasonName}
+          <div style={{ margin: "24px 0" }}>
+            <Grid
+              container
+              alignItems="flex-start"
+              spacing={24}
+              style={{ marginBottom: "36px" }}
+            >
+              <Grid item xs={4}>
+                <img
+                  src={season.image.poster}
+                  alt={season.seasonName}
+                  style={{
+                    width: "100%"
+                  }}
+                />
+              </Grid>
+
+              <Grid
+                item
+                xs={8}
+                style={{
+                  paddingLeft: "24px"
+                }}
+              >
+                <Typography compontent="h1" variant="h4">
+                  {season.show[0].title} - {season.seasonName}
+                </Typography>
+                <Typography compontent="h2" variant="h5">
+                  {season.show[0].subtitle}
+                </Typography>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() =>
+                    this.props.history.push(
+                      `/admin/show/${show}/season/${season._id}/edit`
+                    )
+                  }
+                  style={{ marginTop: "24px" }}
+                >
+                  Edit season
+                </Button>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12} style={{ margin: "24px 0 16px" }}>
+              <Typography component="h1" variant="h5">
+                Episodes:
               </Typography>
-              <Typography compontent="h2" variant="h5">
-                {season.show[0].subtitle}
-              </Typography>
-            </div>
-            <div
+            </Grid>
+
+            <Grid
+              container
+              xs={12}
+              spacing={24}
               style={{
                 display: "flex",
                 flexWrap: "wrap",
@@ -60,40 +112,58 @@ class SeasonDetails extends React.Component {
             >
               {season.episodes.length > 0 &&
                 season.episodes.map(episode => (
-                  <Paper
-                    style={{
-                      maxWidth: "500px",
-                      margin: "24px auto",
-                      width: "800px"
-                    }}
-                    onClick={() =>
-                      this.props.history.push(
-                        `/admin/show/${show}/season/${season._id}/episode/${
-                          episode.excerpt
-                        }`
-                      )
-                    }
-                  >
-                    <img
-                      style={{ width: "100%" }}
-                      src={episode.image.still}
-                      alt={episode.episodeName}
-                    />
-                    <div style={{ padding: "24px" }}>
-                      <Typography component="h1" variant="title">
-                        {episode.episodeNumber}: {episode.episodeName}
-                      </Typography>
-                      <Typography variant="subtitle1">
-                        {episode.description}
-                      </Typography>
-                      <Typography variant="caption" align="right">
-                        Air date:{" "}
-                        {new Date(episode.airDate).toLocaleDateString()}
-                      </Typography>
-                    </div>
-                  </Paper>
+                  <Grid item xs={4}>
+                    <Paper
+                      style={{
+                        minHeight: "400px"
+                      }}
+                    >
+                      <img
+                        style={{ width: "100%" }}
+                        src={episode.image.still}
+                        alt={episode.episodeName}
+                      />
+                      <div
+                        style={{
+                          padding: "24px",
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "space-between"
+                        }}
+                      >
+                        <div>
+                          <Typography component="h1" variant="title">
+                            {episode.episodeNumber}: {episode.episodeName}
+                          </Typography>
+                          <Typography variant="body1">
+                            {episode.description}
+                          </Typography>
+                          <Typography variant="caption" align="right">
+                            {`Air date: ${new Date(
+                              episode.airDate
+                            ).toLocaleDateString()}`}
+                          </Typography>
+                        </div>
+                        <div>
+                          <Button
+                            variant="outlined"
+                            color="secondary"
+                            onClick={() =>
+                              this.props.history.push(
+                                `/admin/show/${show}/season/${
+                                  season._id
+                                }/episode/${episode.excerpt}/edit`
+                              )
+                            }
+                          >
+                            Edit episode
+                          </Button>
+                        </div>
+                      </div>
+                    </Paper>
+                  </Grid>
                 ))}
-            </div>
+            </Grid>
 
             {/*
             <Paper
