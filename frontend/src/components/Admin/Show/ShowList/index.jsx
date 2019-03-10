@@ -68,7 +68,7 @@ class ShowList extends React.Component {
             flexWrap: "wrap"
           }}
         >
-          {shows.length > 1 ? (
+          {shows.length > 0 ? (
             shows.map(show => (
               <Card
                 className={classes.card}
@@ -84,7 +84,7 @@ class ShowList extends React.Component {
                     title={show.title}
                   />
                   <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2">
+                    <Typography variant="h5" component="h2" align="center">
                       {show.title}
                     </Typography>
                   </CardContent>

@@ -1,5 +1,17 @@
 import React from "react";
-import { Paper, Typography } from "@material-ui/core";
+import { withStyles, Paper, Typography, Grid, Link } from "@material-ui/core";
+
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+    maxWidth: 1600,
+    margin: `${theme.spacing.unit * 3}px auto`
+  },
+  paper: {
+    padding: theme.spacing.unit * 3,
+    color: theme.palette.text.secondary
+  }
+});
 
 class ShowDetails extends React.Component {
   state = {
@@ -28,24 +40,78 @@ class ShowDetails extends React.Component {
 
   render() {
     const { show } = this.state;
+    const { classes } = this.props;
 
     return (
-      <Paper
-        style={{
-          margin: "24px auto",
-          padding: "24px",
-          maxWidth: 960
-        }}
-      >
-        <Typography component="h1" variant="h4">
-          {show.title}
-        </Typography>
-        <Typography>
-          <pre>{JSON.stringify(show, null, 4)}</pre>
-        </Typography>
-      </Paper>
+      <div className={classes.root}>
+        {show._id && (
+          <Grid container spacing={24}>
+            <Grid item xs={4}>
+              <img
+                src={show.image.poster}
+                alt={show.title}
+                style={{ width: "100%" }}
+              />
+            </Grid>
+            <Grid item xs={8}>
+              <Typography component="h1" variant="headline">
+                {show.title}
+              </Typography>
+              <Typography component="p" variant="subtitle1">
+                {show.subtitle}
+              </Typography>
+              <Typography component="p" variant="caption">
+                {show.genres &&
+                  show.genres.map(genre => (
+                    <Link color="secondary" href="#">
+                      {genre}
+                    </Link>
+                  ))}
+              </Typography>
+
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-around",
+                  alignItems: "start",
+                  marginTop: "24px"
+                }}
+              >
+                {show.seasons.map(season => (
+                  <Grid item xs={2}>
+                    <Paper>
+                      <img
+                        src={season.image.poster}
+                        alt={season.seasonName}
+                        style={{ width: "100%" }}
+                      />
+                      <Typography>{season.seasonName}</Typography>
+                    </Paper>
+                  </Grid>
+                ))}
+              </div>
+            </Grid>
+          </Grid>
+        )}
+
+        <Paper
+          style={{
+            margin: "24px auto",
+            padding: "24px",
+            maxWidth: 960
+          }}
+        >
+          <Typography component="h1" variant="h4">
+            {show.title}
+          </Typography>
+          <Typography>
+            <pre>{JSON.stringify(show, null, 4)}</pre>
+          </Typography>
+        </Paper>
+      </div>
     );
   }
 }
 
-export default ShowDetails;
+export default withStyles(styles)(ShowDetails);

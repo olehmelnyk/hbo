@@ -16,8 +16,7 @@ const EpisodeSchema = new mongoose.Schema(
       index: true,
       requred: true,
       minlength: 1,
-      maxlength: 255,
-      unique: true
+      maxlength: 255
     },
     episodeNumber: {
       type: Number,
@@ -39,7 +38,7 @@ const EpisodeSchema = new mongoose.Schema(
       type: String,
       trim: true,
       minlength: 0,
-      maxlength: 1000
+      maxlength: 5000
     },
     image: {
       poster: {

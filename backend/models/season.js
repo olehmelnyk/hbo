@@ -14,8 +14,7 @@ const SeasonSchema = new mongoose.Schema(
       index: true,
       requred: true,
       minlength: 1,
-      maxlength: 255,
-      unique: true
+      maxlength: 255
     },
     seasonNumber: {
       type: Number,
@@ -32,7 +31,7 @@ const SeasonSchema = new mongoose.Schema(
       type: String,
       trim: true,
       minlength: 0,
-      maxlength: 1000
+      maxlength: 5000
     },
     image: {
       poster: {
