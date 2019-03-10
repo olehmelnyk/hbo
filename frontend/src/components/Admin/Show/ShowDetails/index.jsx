@@ -1,5 +1,12 @@
 import React from "react";
-import { withStyles, Paper, Typography, Grid, Link } from "@material-ui/core";
+import {
+  withStyles,
+  Paper,
+  Typography,
+  Grid,
+  Link,
+  Button
+} from "@material-ui/core";
 
 const styles = theme => ({
   root: {
@@ -44,6 +51,31 @@ class ShowDetails extends React.Component {
 
     return (
       <div className={classes.root}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            margin: "24px 0"
+          }}
+        >
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={() => this.props.history.push("/admin/show")}
+          >
+            Back
+          </Button>
+          <Button
+            color="secondary"
+            variant="outlined"
+            onClick={() =>
+              this.props.history.push(`/admin/show/${show.excerpt}/edit`)
+            }
+          >
+            Edit
+          </Button>
+        </div>
         {show._id && (
           <Grid container spacing={24}>
             <Grid item xs={4}>
@@ -61,12 +93,7 @@ class ShowDetails extends React.Component {
                 {show.subtitle}
               </Typography>
               <Typography component="p" variant="caption">
-                {show.genres &&
-                  show.genres.map(genre => (
-                    <Link color="secondary" href="#">
-                      {genre}
-                    </Link>
-                  ))}
+                {show.genres && show.genres.join(", ")}
               </Typography>
 
               <div
@@ -80,7 +107,13 @@ class ShowDetails extends React.Component {
               >
                 {show.seasons.map(season => (
                   <Grid item xs={2}>
-                    <Paper>
+                    <Paper
+                      onClick={() =>
+                        this.props.history.push(
+                          `/admin/show/${show.excerpt}/season/${season.excerpt}`
+                        )
+                      }
+                    >
                       <img
                         src={season.image.poster}
                         alt={season.seasonName}
