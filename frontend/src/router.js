@@ -4,8 +4,8 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 
 const Landing = lazy(() => import("./components/Main/Landing"));
 const Show = lazy(() => import("./components/Main/Show"));
-const Signin = lazy(() => import("./pages/Auth/signin"));
-const Signup = lazy(() => import("./pages/Auth/signup"));
+const Login = lazy(() => import("./pages/Auth/Login"));
+const Register = lazy(() => import("./pages/Auth/Register"));
 const Admin = lazy(() => import("./pages/Admin"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -16,10 +16,13 @@ const Router = props => {
         <Switch>
           <Route path="/" render={props => <Landing {...props} />} exact />
 
-          <Redirect from="/login" to="/signin" />
-          <Redirect from="/register" to="/signup" />
-          <Route path="/signin" render={props => <Signin {...props} exact />} />
-          <Route path="/signup" render={props => <Signup {...props} exact />} />
+          <Redirect from="/signin" to="/login" />
+          <Redirect from="/signup" to="/register" />
+          <Route path="/login" render={props => <Login {...props} exact />} />
+          <Route
+            path="/register"
+            render={props => <Register {...props} exact />}
+          />
 
           <Route path="/show" render={props => <Show {...props} />} />
           <Route path="/admin" render={props => <Admin {...props} />} />

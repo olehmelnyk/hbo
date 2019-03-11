@@ -26,11 +26,11 @@ router.get("/featured", (req, res, next) => {
 });
 
 /* public - get show by id */
-router.get("/:showId", (req, res, next) => {
-  const id = req.params.showId;
+router.get("/:excerpt", (req, res, next) => {
+  const excerpt = req.params.excerpt;
 
   Show.aggregate([
-    { $match: { excerpt: id } },
+    { $match: { excerpt } },
     {
       $lookup: {
         from: "seasons",
@@ -68,11 +68,11 @@ router.post("/", (req, res, next) => {
 });
 
 /* protected method - update show by id */
-router.put("/:showId", (req, res, next) => {
-  const id = req.params.showId;
+router.put("/:excerpt", (req, res, next) => {
+  const excerpt = req.params.excerpt;
 
   Show.findOneAndUpdate(
-    { excerpt: id },
+    { excerpt },
     req.fields,
     { new: true },
     (error, show) => {
@@ -87,8 +87,8 @@ router.put("/:showId", (req, res, next) => {
 });
 
 /* protected method - delete show by id */
-router.delete("/:showId", (req, res, next) => {
-  const excerpt = req.params.showId;
+router.delete("/:excerpt", (req, res, next) => {
+  const excerpt = req.params.excerpt;
 
   Show.findOneAndDelete({ excerpt }, (error, show) => {
     if (error) {

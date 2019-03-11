@@ -7,23 +7,25 @@ const User = require("../models/user");
 router.get("/", (req, res, next) => {
   User.find({}, (error, users) => {
     if (error) {
-      console.log(error);
+      res.status(500).json(error);
     }
 
-    res.status(200).send(users);
+    res.status(200).json(users);
   });
 });
 
 /* get user by id */
 router.get("/:id", (req, res, next) => {
-  const _id = req.params.id;
+  const id = req.params.id;
 
-  User.findOne({ _id }, (error, user) => {
+  User.findById(id, (error, user) => {
     if (error) {
-      console.error(error);
+      res.status(500).end(error);
+    } else if (!user || !user._id) {
+      res.status(404).end("User not found");
+    } else {
+      res.status(200).json(user);
     }
-
-    res.status(200).send(user);
   });
 });
 
@@ -31,10 +33,10 @@ router.get("/:id", (req, res, next) => {
 router.post("/", (req, res, next) => {
   User.create(req.fields, (error, user) => {
     if (error) {
-      console.error(error);
+      res.status(500).json(error);
     }
 
-    res.status(201).send(user);
+    res.status(201).json(user);
   });
 });
 
@@ -44,10 +46,10 @@ router.put("/:id", (req, res, next) => {
 
   User.findOneAndUpdate({ _id }, req.fields, { new: true }, (error, user) => {
     if (error) {
-      console.error(error);
+      res.status(500).json(error);
     }
 
-    res.status(200).send(user);
+    res.status(200).json(user);
   });
 });
 
@@ -57,10 +59,10 @@ router.delete("/:id", (req, res, next) => {
 
   User.findOneAndDelete({ _id }, (error, user) => {
     if (error) {
-      console.error(error);
+      res.status(500).json(error);
     }
 
-    res.status(200).send(user);
+    res.status(200).json(user);
   });
 });
 

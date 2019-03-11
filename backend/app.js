@@ -11,15 +11,18 @@ const config = require("./config");
 const app = express();
 
 // initialize middleware
+app.use(passport.initialize());
+require("./passport")(passport);
+
 app.use(cors());
 app.use(logger("dev"));
 app.use(formidable());
 app.use(cookieParser());
 
-app.use("/api/v1/auth", require("./routes/auth"));
-app.use("/api/v1/user", require("./routes/user"));
 app.use("/api/v1/show", require("./routes/show"));
 app.use("/api/v1/season", require("./routes/season"));
 app.use("/api/v1/episode", require("./routes/episode"));
+app.use("/api/v1/auth", require("./routes/auth"));
+app.use("/api/v1/user", require("./routes/user"));
 
 module.exports = app;
