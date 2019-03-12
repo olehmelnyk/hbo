@@ -51,7 +51,7 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res, next) => {
-    Season.create({ ...req.fields }, (error, season) => {
+    Season.create({ ...req.body }, (error, season) => {
       if (error) {
         console.error(error);
       }
@@ -70,7 +70,7 @@ router.put(
 
     Season.findOneAndUpdate(
       { _id },
-      { ...req.fields },
+      { ...req.body },
       { new: true },
       (error, season) => {
         if (error) {

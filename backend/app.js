@@ -16,7 +16,10 @@ require("./passport")(passport);
 
 app.use(cors());
 app.use(logger("dev"));
-app.use(formidable());
+// app.use(formidable());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cookieParser());
 
 app.use("/api/v1/show", require("./routes/show"));

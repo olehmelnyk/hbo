@@ -19,13 +19,6 @@ router.get("/", (req, res, next) => {
 router.get("/:episodeId", (req, res, next) => {
   const id = req.params.episodeId;
 
-  // Episode.findOne({ excerpt: id }, (error, episode) => {
-  //   if (error) {
-  //     console.error(error);
-  //   }
-
-  //   res.status(200).send(episode);
-  // });
   Episode.aggregate([
     { $match: { excerpt: id } },
     {
@@ -57,7 +50,7 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res, next) => {
-    Episode.create(req.fields, (error, v) => {
+    Episode.create(req.body, (error, v) => {
       if (error) {
         console.error(error);
       }
@@ -76,7 +69,7 @@ router.put(
 
     Episode.findOneAndUpdate(
       { excerpt: id },
-      req.fields,
+      req.body,
       { new: true },
       (error, episode) => {
         if (error) {

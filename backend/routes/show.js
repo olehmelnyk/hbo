@@ -61,7 +61,7 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   (req, res, next) => {
-    Show.create(req.fields, (error, show) => {
+    Show.create(req.body, (error, show) => {
       if (error) {
         console.log(error);
         res.status(500).send(error);

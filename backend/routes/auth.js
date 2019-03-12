@@ -12,13 +12,13 @@ const config = require("../config");
 const User = require("../models/user");
 
 router.post("/login", (req, res) => {
-  const { errors, isValid } = validateLoginInput(req.fields);
+  const { errors, isValid } = validateLoginInput(req.body);
 
   if (!isValid) {
     return res.status(400).json(errors);
   }
 
-  const { email, password } = req.fields;
+  const { email, password } = req.body;
 
   User.findOne({ email })
     .select("+password")
@@ -76,30 +76,30 @@ router.get(
 );
 
 router.post("/register", (req, res, next) => {
-  const { errors, isValid } = validateRegisterInput(req.fields);
+  const { errors, isValid } = validateRegisterInput(req.body);
 
   if (!isValid) {
     return res.status(400).json(errors);
   }
 
   User.findOne({
-    email: req.fields.email
+    email: req.body.email
   }).then(user => {
     if (user) {
       return res.status(400).json({
         email: "Email already exists"
       });
     } else {
-      const avatar = gravatar.url(req.fields.email, {
+      const avatar = gravatar.url(req.body.email, {
         s: "200",
         r: "pg",
         d: "mm"
       });
 
       const newUser = new User({
-        name: req.fields.name,
-        email: req.fields.email,
-        password: req.fields.password,
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
         avatar
       });
 

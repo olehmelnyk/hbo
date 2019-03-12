@@ -32,7 +32,7 @@ router.get("/:id", (req, res, next) => {
 
 /* create a new user */
 router.post("/", (req, res, next) => {
-  User.create(req.fields, (error, user) => {
+  User.create(req.body, (error, user) => {
     if (error) {
       res.status(500).json(error);
     }
@@ -48,7 +48,7 @@ router.put(
   (req, res, next) => {
     const _id = req.params.id;
 
-    User.findOneAndUpdate({ _id }, req.fields, { new: true }, (error, user) => {
+    User.findOneAndUpdate({ _id }, req.body, { new: true }, (error, user) => {
       if (error) {
         res.status(500).json(error);
       }
