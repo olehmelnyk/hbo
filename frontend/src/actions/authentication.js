@@ -6,7 +6,13 @@ import { auth as authApi } from "../api/hbo";
 export const registerUser = (user, history) => dispatch => {
   authApi
     .post("/register", user)
-    .then(res => history.push("/login"))
+    .then(res => {
+      if (res.status !== 201) {
+        console.log(res.data);
+        throw new Error(res.data);
+      }
+      history.push("/login");
+    })
     .catch(err =>
       dispatch({
         type: GET_ERRORS,
