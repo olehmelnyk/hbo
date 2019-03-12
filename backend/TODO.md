@@ -1,4 +1,3 @@
-- user registration / autoriazation using jwt tokens, protected routes
 - implement ratring (only authrized users can vote)
 - return data as xml
 - optimize DB queries

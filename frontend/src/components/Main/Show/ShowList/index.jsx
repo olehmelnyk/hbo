@@ -2,9 +2,15 @@
     This page renders list of all tv-shows
 */
 import React from "react";
-import { Paper, Typography, AppBar, Toolbar, Button, InputBase  } from "@material-ui/core";
-import './show-list.css';
-
+import {
+  Paper,
+  Typography,
+  AppBar,
+  Toolbar,
+  Button,
+  InputBase
+} from "@material-ui/core";
+import "./show-list.css";
 
 class ShowList extends React.Component {
   state = {
@@ -46,25 +52,26 @@ class ShowList extends React.Component {
             Page that show list of all TV-shows (not just featured ones)
           </Typography>
         </Paper>*/}
-        <AppBar style={{
-          backgroundColor: '#252837'
-        }}>
-            <Toolbar class="toolbar">
-              <div className="search-container">
-                <InputBase placeholder="Search…" />
-              </div>
+        <AppBar
+          style={{
+            backgroundColor: "#252837"
+          }}
+        >
+          <Toolbar class="toolbar">
+            <div className="search-container">
+              <InputBase placeholder="Search…" />
+            </div>
 
-              <div className="shows-container">
-                <h1 className="header">SHOWS</h1>
-              </div>
+            <div className="shows-container">
+              <h1 className="header">SHOWS</h1>
+            </div>
 
-              <div className="buttons-container">
-                <Button className="login">Login</Button>
-                <Button className="sign-up">Sign up</Button>
-              </div>
-
-            </Toolbar>
-          </AppBar>
+            <div className="buttons-container">
+              <Button className="login">Login</Button>
+              <Button className="sign-up">Sign up</Button>
+            </div>
+          </Toolbar>
+        </AppBar>
 
         {shows.length > 0 ? (
           shows.map(show => (
@@ -72,12 +79,12 @@ class ShowList extends React.Component {
               style={{
                 margin: "24px auto",
                 maxWidth: 750,
-                display: 'flex',
-                flexDirection: 'row'
+                display: "flex",
+                flexDirection: "row"
               }}
             >
               <div class="show">
-                <img src={show.image.poster} />
+                <img src={show.image.poster} alt={show.title} />
               </div>
 
               <div class="show-container">
@@ -87,34 +94,37 @@ class ShowList extends React.Component {
                   {/*<p class="show-created-at">created at {show.createdAt}</p>
                   <p class="show-updated-at">updated at{show.updatedAt}</p>*/}
                   <div class="seasons-and-episodes">
-                    <p class="show-number-of-episodes">{show.numberOfEpisodes} episodes</p>
+                    <p class="show-number-of-episodes">
+                      {show.numberOfEpisodes} episodes
+                    </p>
                     <hr />
-                    <p class="show-number-of-seasons">{show.numberOfSeasons} seasons</p>
+                    <p class="show-number-of-seasons">
+                      {show.numberOfSeasons} seasons
+                    </p>
                   </div>
                 </div>
 
                 <div class="subtitle-container">
                   <p>{show.subtitle}</p>
                 </div>
-
               </div>
 
               {/* <pre>{JSON.stringify(show, null, 4)}</pre> */}
             </Paper>
           ))
         ) : (
-            <Paper
-              style={{
-                margin: "24px auto",
-                padding: "24px",
-                maxWidth: 750
-              }}
-            >
-              <Typography component="p" variant="caption">
-                No shows - nothing to display :(
+          <Paper
+            style={{
+              margin: "24px auto",
+              padding: "24px",
+              maxWidth: 750
+            }}
+          >
+            <Typography component="p" variant="caption">
+              No shows - nothing to display :(
             </Typography>
-            </Paper>
-          )}
+          </Paper>
+        )}
       </div>
     );
   }

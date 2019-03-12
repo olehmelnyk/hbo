@@ -2,30 +2,48 @@ import React, { Suspense, lazy } from "react";
 import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
+import { connect } from "react-redux";
+import { logoutUser } from "../../actions/authentication";
+import { withRouter } from "react-router-dom";
+
 const Show = lazy(() => import("../../components/Admin/Show"));
+const User = lazy(() => import("../../components/Admin/User"));
 
 const NotFound = lazy(() => import("../NotFound"));
 
-const Admin = props => {
-  return (
-    <BrowserRouter>
-      <Suspense fallback={<LinearProgress color="primary" />}>
-        <Switch>
-          {/* 
-            we can check here if user is authorised 
-            and have access this admin area - 
-            if not - redirect to page not found, lol 
-          */}
+class Admin extends React.Component {
+  state = {};
 
-          <Redirect from="/admin" to="/admin/show" exact />
+  componentDidMount() {
+    const { isAuthenticated, user } = this.props.auth;
 
-          <Route path="/admin/show" render={props => <Show {...props} />} />
+    if (!isAuthenticated || user.exp < Math.round(Date.now() / 1000)) {
+      this.props.logoutUser(this.props.history);
+    }
+  }
 
-          <Route render={props => <NotFound {...props} />} />
-        </Switch>
-      </Suspense>
-    </BrowserRouter>
-  );
-};
+  render() {
+    return (
+      <BrowserRouter>
+        <Suspense fallback={<LinearProgress color="secondary" />}>
+          <Switch>
+            <Redirect from="/admin" to="/admin/show" exact />
+            <Route path="/admin/show" render={props => <Show {...props} />} />
+            <Route path="/admin/user" render={props => <User {...props} />} />
 
-export default Admin;
+            <Route render={props => <NotFound {...props} />} />
+          </Switch>
+        </Suspense>
+      </BrowserRouter>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  { logoutUser }
+)(withRouter(Admin));

@@ -1,11 +1,4 @@
 const mongoose = require("mongoose");
-const bcrypt = require("mongoose-bcrypt");
-
-const sanitizeUsername = username =>
-  username
-    .trim()
-    .replace(/\s+/g, "_")
-    .replace(/\W+/g, "");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -20,9 +13,7 @@ const UserSchema = new mongoose.Schema(
     name: {
       type: String,
       index: true,
-      unique: true,
-      required: true,
-      set: sanitizeUsername
+      required: true
     },
     password: {
       type: String,
@@ -40,9 +31,5 @@ const UserSchema = new mongoose.Schema(
   },
   { collection: "users", timestamps: true }
 );
-
-// require plugins
-// UserSchema.plugin(bcrypt); // automatically bcrypts passwords
-// UserSchema.plugin(timestamps); // automatically adds createdAt and updatedAt timestamps
 
 module.exports = mongoose.model("User", UserSchema);

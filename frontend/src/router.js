@@ -2,6 +2,8 @@ import React, { Suspense, lazy } from "react";
 import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
 import LinearProgress from "@material-ui/core/LinearProgress";
 
+import Navbar from "./components/Navbar";
+
 const Landing = lazy(() => import("./components/Main/Landing"));
 const Show = lazy(() => import("./components/Main/Show"));
 const Login = lazy(() => import("./pages/Auth/Login"));
@@ -13,6 +15,8 @@ const Router = props => {
   return (
     <BrowserRouter>
       <Suspense fallback={<LinearProgress color="secondary" />}>
+        <Navbar />
+
         <Switch>
           <Route path="/" render={props => <Landing {...props} />} exact />
 

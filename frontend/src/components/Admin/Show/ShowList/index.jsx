@@ -1,11 +1,9 @@
 import React from "react";
 import {
   withStyles,
-  Paper,
   Typography,
   Card,
   CardActionArea,
-  CardActions,
   CardContent,
   CardMedia,
   Button

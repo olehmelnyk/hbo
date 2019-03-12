@@ -45,7 +45,7 @@ router.post("/login", (req, res) => {
               (err, token) => {
                 if (err) console.error("There is some error in token", err);
                 else {
-                  res.json({
+                  res.status(200).json({
                     success: true,
                     token: `Bearer ${token}`
                   });
@@ -94,6 +94,7 @@ router.post("/register", (req, res, next) => {
         r: "pg",
         d: "mm"
       });
+
       const newUser = new User({
         name: req.fields.name,
         email: req.fields.email,
@@ -109,7 +110,7 @@ router.post("/register", (req, res, next) => {
             else {
               newUser.password = hash;
               newUser.save().then(user => {
-                res.json(user);
+                res.status(201).json(user);
               });
             }
           });

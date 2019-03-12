@@ -20,10 +20,9 @@ export const loginUser = user => dispatch => {
     .post("//localhost:3001/api/v1/auth/login", user)
     .then(res => {
       const { token } = res.data;
-      const decoded = jwt_decode(token);
-
       localStorage.setItem("jwtToken", token);
       setAuthToken(token);
+      const decoded = jwt_decode(token);
       dispatch(setCurrentUser(decoded));
     })
     .catch(err => {
