@@ -16,7 +16,10 @@ class EpisodeForm extends React.Component {
       fetch(`http://localhost:3001/api/v1/episode/${episode}`, {
         method: "PUT",
         body: JSON.stringify(values),
-        headers: new Headers({ "Content-type": "application/json" })
+        headers: new Headers({
+          "Content-type": "application/json",
+          Authorization: localStorage.getItem("jwtToken")
+        })
       })
         .then(response => {
           if (response.status !== 200) {
@@ -38,7 +41,10 @@ class EpisodeForm extends React.Component {
       fetch("http://localhost:3001/api/v1/episode", {
         method: "POST",
         body: JSON.stringify(values),
-        headers: new Headers({ "Content-type": "application/json" })
+        headers: new Headers({
+          "Content-type": "application/json",
+          Authorization: localStorage.getItem("jwtToken")
+        })
       })
         .then(response => {
           if (response.status !== 201) {
