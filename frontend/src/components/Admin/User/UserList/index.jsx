@@ -1,6 +1,7 @@
 import React from "react";
-
 import { Paper, Typography, Button } from "@material-ui/core";
+
+import { user as userApi } from "../../../../api/hbo";
 
 class User extends React.Component {
   state = {
@@ -8,43 +9,22 @@ class User extends React.Component {
   };
 
   componentDidMount() {
-    fetch("http://localhost:3001/api/v1/user")
-      .then(response => {
-        if (response.status !== 200) {
-          throw new Error(response.statusTetx);
+    userApi
+      .get("/")
+      .then(res => {
+        if (!res.status === 200) {
+          throw new Error(res.data);
         }
-        return response.json();
-      })
-      .then(users => {
-        if (!Array.isArray(users)) {
-          throw new Error("Bad resonse from the server");
-        }
-
-        this.setState({ users });
+        this.setState({ users: res.data });
       })
       .catch(error => {
         console.log(error);
+        this.props.history.push("/page_not_found");
       });
   }
 
   render() {
     const { users } = this.state;
-
-    /*
-
-    // user structure
-    {
-      "admin": false,
-      "_id": "5c87828ff7ae944e38db54be",
-      "name": "Anita",
-      "email": "anita@gmail.com",
-      "avatar": "//www.gravatar.com/avatar/b14e4a94fc689db51e24f7379c5c089d?s=200&r=pg&d=mm",
-      "createdAt": "2019-03-12T09:57:36.030Z",
-      "updatedAt": "2019-03-12T09:57:36.030Z",
-      "__v": 0
-    }
-    
-    */
 
     return (
       <div
@@ -117,23 +97,17 @@ class User extends React.Component {
                     color="secondary"
                     variant="outlined"
                     onClick={() => {
-                      const token = localStorage.getItem("jwtToken");
-
-                      fetch(`http://localhost:3001/api/v1/user/${user._id}`, {
-                        method: "DELETE",
-                        headers: new Headers({
-                          "Content-type": "application/json",
-                          Authorization: token
-                        })
-                      }).then(response => {
-                        if (response.status === 200) {
+                      userApi
+                        .delete(`/${user._id}`)
+                        .then(res => {
+                          if (!res.status !== 200) {
+                            throw new Error(res.data);
+                          }
                           this.setState({
                             users: users.filter(_user => _user._id !== user._id)
                           });
-                        } else {
-                          console.log(response.statusText);
-                        }
-                      });
+                        })
+                        .catch(error => console.log(error));
                     }}
                   >
                     Delete

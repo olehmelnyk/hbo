@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Field } from "react-final-form";
 import { TextField, Select } from "final-form-material-ui";
 import { Typography, Paper, Grid, Button, MenuItem } from "@material-ui/core";
+import { season as seasonApi, show as showApi } from "../../../../api/hbo";
 
 class SeasonForm extends React.Component {
   state = {
@@ -11,53 +12,32 @@ class SeasonForm extends React.Component {
   onSubmit = async values => {
     const { show, season } = this.props.match.params;
 
+    const data = JSON.stringify(values);
+
     if (season) {
       // edit
-      fetch(`http://localhost:3001/api/v1/season/${season}`, {
-        method: "PUT",
-        body: JSON.stringify(values),
-        headers: new Headers({
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwtToken")
-        })
-      })
-        .then(response => {
-          if (response.status !== 200) {
-            throw new Error(response.error);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (!data._id) {
-            throw new Error("Bad response");
-          }
-          this.props.history.push(`/admin/show/${show}/season`);
-        })
-        .catch(error => console.log(error));
-    } else {
-      // add
-      fetch("http://localhost:3001/api/v1/season", {
-        method: "POST",
-        body: JSON.stringify(values),
-        headers: new Headers({
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwtToken")
-        })
-      })
-        .then(response => {
-          if (response.status !== 201) {
-            throw new Error(response.error);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (!data._id) {
-            throw new Error("Bad response");
-          }
+
+      seasonApi
+        .put(`/${season}`, data)
+        .then(res => {
+          if (res.status !== 200) throw new Error(res.data);
           this.props.history.push(`/admin/show/${show}/season`);
         })
         .catch(error => {
           console.log(error);
+          this.props.history.push("/page_not_found");
+        });
+    } else {
+      // add
+      seasonApi
+        .post("/", data)
+        .then(res => {
+          if (res.status !== 201) throw new Error(res.data);
+          this.props.history.push(`/admin/show/${show}/season`);
+        })
+        .catch(error => {
+          console.log(error);
+          this.props.history.push("/page_not_found");
         });
     }
   };
@@ -80,15 +60,12 @@ class SeasonForm extends React.Component {
     const excerpt = this.props.match.params.season;
 
     if (excerpt) {
-      fetch(`http://localhost:3001/api/v1/season/${excerpt}`)
-        .then(response => {
-          if (response.status !== 200) {
-            throw new Error(response.statusText);
-          }
+      seasonApi
+        .get(`/${excerpt}`)
+        .then(res => {
+          if (res.status !== 200) throw new Error(res.data);
 
-          return response.json();
-        })
-        .then(season => {
+          const season = res.data;
           if (!season._id) {
             throw new Error("Bad response from the server");
           }
@@ -106,23 +83,16 @@ class SeasonForm extends React.Component {
     }
 
     // get the list of all shows - we need _id and titles
-    fetch(`http://localhost:3001/api/v1/show`)
-      .then(response => {
-        if (response.status !== 200) {
-          throw new Error(response.statusText);
-        }
 
-        return response.json();
-      })
-      .then(shows => {
-        if (!Array.isArray(shows)) {
-          throw new Error("Bad response from the server");
-        }
-
-        this.setState({ shows });
+    showApi
+      .get("/")
+      .then(res => {
+        if (res.status !== 200) throw new Error(res.data);
+        this.setState({ shows: res.data });
       })
       .catch(error => {
         console.log(error);
+        this.props.history.push("/page_not_found");
       });
   }
 

@@ -8,6 +8,7 @@ import {
   Button,
   FormControlLabel
 } from "@material-ui/core";
+import { user as userApi, auth as authApi } from "../../../../api/hbo";
 
 class UserForm extends React.Component {
   state = {
@@ -17,54 +18,34 @@ class UserForm extends React.Component {
   onSubmit = async values => {
     const userId = this.props.match.params.id;
 
+    const data = JSON.stringify(values);
+
     if (userId) {
       // edit
-      fetch(`http://localhost:3001/api/v1/user/${userId}`, {
-        method: "PUT",
-        body: JSON.stringify(values),
-        headers: new Headers({
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwtToken")
-        })
-      })
-        .then(response => {
-          if (response.status !== 200) {
-            throw new Error(response.error);
+
+      userApi
+        .put(`/${userId}`, data)
+        .then(res => {
+          if (res.status !== 200) {
+            throw new Error(res.data);
           }
-          return response.json();
-        })
-        .then(data => {
-          if (!data._id) {
-            throw new Error("Bad response");
-          }
+
           this.props.history.push("/admin/user");
         })
         .catch(error => console.log(error));
     } else {
       // add
-      fetch("http://localhost:3001/api/v1/auth/register", {
-        method: "POST",
-        body: JSON.stringify(values),
-        headers: new Headers({
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwtToken")
-        })
-      })
-        .then(response => {
-          if (response.status !== 201) {
-            throw new Error(response.error);
+
+      authApi
+        .post("/register", data)
+        .then(res => {
+          if (res.status !== 201) {
+            throw new Error(res.data);
           }
-          return response.json();
-        })
-        .then(data => {
-          if (!data._id) {
-            throw new Error("Bad response");
-          }
+
           this.props.history.push("/admin/user");
         })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(error => console.log(error));
     }
   };
 
@@ -85,25 +66,16 @@ class UserForm extends React.Component {
     const userId = this.props.match.params.id;
 
     if (userId) {
-      fetch(`http://localhost:3001/api/v1/user/${userId}`)
-        .then(response => {
-          if (response.status !== 200) {
-            throw new Error(response.statusText);
+      userApi
+        .get(`/${userId}`)
+        .then(res => {
+          if (res.status !== 200) {
+            throw new Error(res.data);
           }
 
-          return response.json();
+          this.setState({ user: res.data });
         })
-        .then(user => {
-          if (!user._id) {
-            throw new Error("Bad response from the server");
-          }
-
-          this.setState({ user });
-        })
-        .catch(error => {
-          console.log(error);
-          this.props.history.push("/page_not_found");
-        });
+        .catch(error => console.log(error));
     }
   }
 

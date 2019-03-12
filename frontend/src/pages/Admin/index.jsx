@@ -29,14 +29,17 @@ class Admin extends React.Component {
       .then(response => {
         if (response.status !== 200) {
           this.props.logoutUser(this.props.history);
+          throw new Error(response.statusText);
         }
         return response.json();
       })
       .then(user => {
         if (!user.admin) {
           this.props.logoutUser(this.props.history);
+          throw new Error("User not found");
         }
-      });
+      })
+      .catch(error => console.log(error));
   }
 
   render() {

@@ -1,23 +1,23 @@
-import axios from "axios";
 import { GET_ERRORS, SET_CURRENT_USER } from "./types";
 import setAuthToken from "../setAuthToken";
 import jwt_decode from "jwt-decode";
+import { auth as authApi } from "../api/hbo";
 
 export const registerUser = (user, history) => dispatch => {
-  axios
-    .post("//localhost:3001/api/v1/auth/register", user)
+  authApi
+    .post("/register", user)
     .then(res => history.push("/login"))
-    .catch(err => {
+    .catch(err =>
       dispatch({
         type: GET_ERRORS,
         payload: err.response.data
-      });
-    });
+      })
+    );
 };
 
 export const loginUser = user => dispatch => {
-  axios
-    .post("//localhost:3001/api/v1/auth/login", user)
+  authApi
+    .post("/login", user)
     .then(res => {
       const { token } = res.data;
       localStorage.setItem("jwtToken", token);

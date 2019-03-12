@@ -1,5 +1,6 @@
 import React from "react";
 import { Paper, Typography } from "@material-ui/core";
+import { season as seasonApi } from "../../../../api/hbo";
 
 class SeasonList extends React.Component {
   state = {
@@ -9,20 +10,17 @@ class SeasonList extends React.Component {
   componentDidMount() {
     const { show } = this.props.match.params;
 
-    fetch(`http://localhost:3001/api/v1/show/${show}`)
-      .then(response => {
-        if (response.status !== 200) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
+    seasonApi
+      .get(`/${show}`)
+      .then(res => {
+        if (res.status !== 200) throw new Error(res.data);
+
+        this.setState({ seasons: res.seasons });
       })
-      .then(show => {
-        if (!show._id) {
-          throw new Error("Bad response from the server");
-        }
-        this.setState({ seasons: show.seasons });
-      })
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log(error);
+        this.props.history.push("/page_not_found");
+      });
   }
 
   render() {
@@ -49,20 +47,6 @@ class SeasonList extends React.Component {
                 <Typography>{season.description}</Typography>
               </Paper>
             ))}
-
-        {/*
-        <Paper
-          style={{
-            margin: "24px auto",
-            padding: "24px",
-            maxWidth: 960
-          }}
-        >
-          <Typography>
-            <pre>{JSON.stringify(seasons, null, 4)}</pre>
-          </Typography>
-        </Paper>    
-            */}
       </div>
     );
   }
