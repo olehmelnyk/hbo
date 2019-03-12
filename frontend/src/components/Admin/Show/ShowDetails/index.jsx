@@ -1,12 +1,6 @@
 import React from "react";
-import {
-  withStyles,
-  Paper,
-  Typography,
-  Grid,
-  Link,
-  Button
-} from "@material-ui/core";
+import { withStyles, Paper, Typography, Grid, Button } from "@material-ui/core";
+import { show as showApi } from "../../../../api/hbo";
 
 const styles = theme => ({
   root: {
@@ -28,21 +22,15 @@ class ShowDetails extends React.Component {
   componentDidMount() {
     const excerpt = this.props.match.params.id;
 
-    fetch(`http://localhost:3001/api/v1/show/${excerpt}`)
-      .then(response => {
-        if (response.status !== 200) {
-          throw new Error(response.statusText);
-        }
-
-        return response.json();
+    showApi
+      .get(`/${excerpt}`)
+      .then(res => {
+        this.setState({ show: res.data });
       })
-      .then(show => {
-        if (!show._id) {
-          throw new Error("Bad response from the server");
-        }
-        this.setState({ show });
-      })
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log(error);
+        this.props.history.push("/page_not_found");
+      });
   }
 
   render() {
@@ -146,6 +134,7 @@ class ShowDetails extends React.Component {
                         float: "left",
                         margin: "0 24px 24px 0"
                       }}
+                      key={season._id}
                     >
                       <Paper
                         onClick={() =>
@@ -172,23 +161,6 @@ class ShowDetails extends React.Component {
             </Grid>
           </Grid>
         )}
-
-        {/*
-        <Paper
-          style={{
-            margin: "24px auto",
-            padding: "24px",
-            maxWidth: 960
-          }}
-        >
-          <Typography component="h1" variant="h4">
-            {show.title}
-          </Typography>
-          <Typography>
-            <pre>{JSON.stringify(show, null, 4)}</pre>
-          </Typography>
-        </Paper>
-        */}
       </div>
     );
   }

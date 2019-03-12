@@ -1,5 +1,6 @@
 import React from "react";
 import { Paper, Typography, Button, Grid } from "@material-ui/core";
+import { season as seasonApi } from "../../../../api/hbo";
 
 class SeasonDetails extends React.Component {
   state = {
@@ -9,18 +10,11 @@ class SeasonDetails extends React.Component {
   componentDidMount() {
     const { season } = this.props.match.params;
 
-    fetch(`http://localhost:3001/api/v1/season/${season}`)
-      .then(response => {
-        if (response.status !== 200) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then(season => {
-        if (!season._id) {
-          throw new Error("Bad response from the server");
-        }
-        this.setState({ season });
+    seasonApi
+      .get(`/${season}`)
+      .then(res => {
+        if (res.status !== 200) throw new Error(res.data);
+        this.setState({ season: res.data });
       })
       .catch(error => {
         console.log(error);
@@ -115,7 +109,6 @@ class SeasonDetails extends React.Component {
 
             <Grid
               container
-              xs={12}
               spacing={24}
               style={{
                 display: "flex",
@@ -126,7 +119,7 @@ class SeasonDetails extends React.Component {
             >
               {season.episodes.length > 0 &&
                 season.episodes.map(episode => (
-                  <Grid item xs={4}>
+                  <Grid item xs={4} key={episode._id}>
                     <Paper
                       style={{
                         minHeight: "400px"
@@ -146,7 +139,7 @@ class SeasonDetails extends React.Component {
                         }}
                       >
                         <div>
-                          <Typography component="h1" variant="title">
+                          <Typography component="h1" variant="h6">
                             {episode.episodeNumber}: {episode.episodeName}
                           </Typography>
                           <Typography variant="body1">
@@ -178,20 +171,6 @@ class SeasonDetails extends React.Component {
                   </Grid>
                 ))}
             </Grid>
-
-            {/*
-            <Paper
-              style={{
-                margin: "24px auto",
-                padding: "24px",
-                maxWidth: "1200px"
-              }}
-            >
-              <Typography>
-                <pre>{JSON.stringify(season, null, 4)}</pre>
-              </Typography>
-            </Paper>
-            */}
           </div>
         )}
       </div>

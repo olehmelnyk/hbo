@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
 
 const Episode = require("../models/episode");
 
@@ -18,13 +19,6 @@ router.get("/", (req, res, next) => {
 router.get("/:episodeId", (req, res, next) => {
   const id = req.params.episodeId;
 
-  // Episode.findOne({ excerpt: id }, (error, episode) => {
-  //   if (error) {
-  //     console.error(error);
-  //   }
-
-  //   res.status(200).send(episode);
-  // });
   Episode.aggregate([
     { $match: { excerpt: id } },
     {
@@ -52,45 +46,57 @@ router.get("/:episodeId", (req, res, next) => {
 });
 
 /* protected method - create a new show */
-router.post("/", (req, res, next) => {
-  Episode.create(req.fields, (error, v) => {
-    if (error) {
-      console.error(error);
-    }
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    Episode.create(req.body, (error, v) => {
+      if (error) {
+        console.error(error);
+      }
 
-    res.status(201).send(v);
-  });
-});
+      res.status(201).send(v);
+    });
+  }
+);
 
 /* protected method - update show by id */
-router.put("/:episodeId", (req, res, next) => {
-  const id = req.params.episodeId;
+router.put(
+  "/:episodeId",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    const id = req.params.episodeId;
 
-  Episode.findOneAndUpdate(
-    { excerpt: id },
-    req.fields,
-    { new: true },
-    (error, episode) => {
+    Episode.findOneAndUpdate(
+      { excerpt: id },
+      req.body,
+      { new: true },
+      (error, episode) => {
+        if (error) {
+          console.error(error);
+        }
+
+        res.status(200).send(episode);
+      }
+    );
+  }
+);
+
+/* protected method - delete show by id */
+router.delete(
+  "/:episodeId",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    const excerpt = req.params.episodeId;
+
+    Episode.findOneAndDelete({ excerpt }, (error, episode) => {
       if (error) {
         console.error(error);
       }
 
       res.status(200).send(episode);
-    }
-  );
-});
-
-/* protected method - delete show by id */
-router.delete("/:episodeId", (req, res, next) => {
-  const excerpt = req.params.episodeId;
-
-  Episode.findOneAndDelete({ excerpt }, (error, episode) => {
-    if (error) {
-      console.error(error);
-    }
-
-    res.status(200).send(episode);
-  });
-});
+    });
+  }
+);
 
 module.exports = router;

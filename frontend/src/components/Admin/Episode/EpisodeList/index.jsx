@@ -1,5 +1,6 @@
 import React from "react";
 import { Paper, Typography, Link } from "@material-ui/core";
+import { episode as episodeApi } from "../../../../api/hbo";
 
 class EpisodeList extends React.Component {
   state = {
@@ -9,20 +10,16 @@ class EpisodeList extends React.Component {
   componentDidMount() {
     const { show } = this.props.match.params;
 
-    fetch(`http://localhost:3001/api/v1/show/${show}`)
-      .then(response => {
-        if (response.status !== 200) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
+    episodeApi
+      .get(`/${show}`)
+      .then(res => {
+        if (res.status !== 200) throw new Error(res.data);
+        this.setState({ episodes: res.data.episodes });
       })
-      .then(show => {
-        if (!show._id) {
-          throw new Error("Bad response from the server");
-        }
-        this.setState({ episodes: show.episodes });
-      })
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log(error);
+        this.props.history.push("/path_not_found");
+      });
   }
 
   render() {

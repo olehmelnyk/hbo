@@ -1,3 +1,5 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+
 import React from "react";
 import { Typography, Button } from "@material-ui/core";
 

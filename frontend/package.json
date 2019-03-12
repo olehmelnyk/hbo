@@ -1,17 +1,25 @@
 {
+  "proxy": "http://localhost:3001",
   "name": "hbo",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.9.2",
+    "axios": "^0.18.0",
+    "bootstrap": "^4.3.1",
+    "classnames": "^2.2.6",
     "final-form": "^4.12.0",
     "final-form-material-ui": "^0.3.0",
+    "jwt-decode": "^2.2.0",
     "material-ui-pickers": "^2.2.4",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-final-form": "^4.1.0",
+    "react-redux": "^6.0.1",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.8"
+    "react-scripts": "2.1.8",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
     "start": "react-scripts start",

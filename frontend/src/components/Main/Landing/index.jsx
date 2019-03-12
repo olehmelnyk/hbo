@@ -3,6 +3,7 @@
 */
 import React from "react";
 import { Paper, Typography } from "@material-ui/core";
+import { show as showApi } from "../../../api/hbo";
 
 // const Landing = () => <div>Landing Page</div>;
 class Landing extends React.Component {
@@ -11,22 +12,15 @@ class Landing extends React.Component {
   };
 
   componentDidMount() {
-    fetch("http://localhost:3001/api/v1/show/featured")
-      .then(response => {
-        if (response.status !== 200) {
-          throw new Error(response.statusText);
-        } else {
-          return response.json();
-        }
+    showApi
+      .get("/featured")
+      .then(res => {
+        if (res.status !== 200) throw new Error(res.data);
+        this.setState({ shows: res.data });
       })
-      .then(shows => {
-        if (!Array.isArray(shows) || shows.length < 1) {
-          throw new Error("No shows to display");
-        } else {
-          this.setState({ shows });
-        }
-      })
-      .catch(error => console.error(error));
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   render() {

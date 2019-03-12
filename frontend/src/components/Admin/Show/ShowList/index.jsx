@@ -1,15 +1,14 @@
 import React from "react";
 import {
   withStyles,
-  Paper,
   Typography,
   Card,
   CardActionArea,
-  CardActions,
   CardContent,
   CardMedia,
   Button
 } from "@material-ui/core";
+import { show as showApi } from "../../../../api/hbo";
 
 const styles = {
   card: {
@@ -32,18 +31,11 @@ class ShowList extends React.Component {
   };
 
   componentDidMount() {
-    fetch("http://localhost:3001/api/v1/show")
-      .then(response => {
-        if (response.status !== 200) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then(shows => {
-        if (!Array.isArray(shows)) {
-          throw new Error("Bad response from the server");
-        }
-        this.setState({ shows });
+    showApi
+      .get("/")
+      .then(res => {
+        if (res.status !== 200) throw new Error(res.data);
+        this.setState({ shows: res.data });
       })
       .catch(error => console.log(error));
   }
@@ -81,6 +73,7 @@ class ShowList extends React.Component {
                 onClick={() =>
                   this.props.history.push(`/admin/show/${show.excerpt}`)
                 }
+                key={show._id}
               >
                 <CardActionArea>
                   <CardMedia
@@ -99,23 +92,6 @@ class ShowList extends React.Component {
           ) : (
             <Typography>"No shows in DB"</Typography>
           )}
-
-          {/*
-      <Paper
-        style={{
-          margin: "24px auto",
-          padding: "24px",
-          maxWidth: 960
-        }}
-      >
-        <Typography component="h1" variant="h4">
-          Show list
-        </Typography>
-        <Typography>
-          <pre>{JSON.stringify(shows, null, 4)}</pre>
-        </Typography>
-      </Paper>
-      */}
         </div>
       </div>
     );

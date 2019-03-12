@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
 const mongoose = require("mongoose");
 const Season = require("../models/season");
 
@@ -46,48 +47,60 @@ router.get("/:seasonId", (req, res, next) => {
 });
 
 /* protected method - create a new show */
-router.post("/", (req, res, next) => {
-  Season.create({ ...req.fields }, (error, season) => {
-    if (error) {
-      console.error(error);
-    }
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    Season.create({ ...req.body }, (error, season) => {
+      if (error) {
+        console.error(error);
+      }
 
-    res.status(201).send(season);
-  });
-});
+      res.status(201).send(season);
+    });
+  }
+);
 
 /* protected method - update show by id */
-router.put("/:seasonId", (req, res, next) => {
-  const _id = req.params.seasonId;
+router.put(
+  "/:seasonId",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    const _id = req.params.seasonId;
 
-  Season.findOneAndUpdate(
-    { _id },
-    { ...req.fields },
-    { new: true },
-    (error, season) => {
+    Season.findOneAndUpdate(
+      { _id },
+      { ...req.body },
+      { new: true },
+      (error, season) => {
+        if (error) {
+          throw new Error(error);
+        }
+
+        res.status(200).send(season);
+      }
+    ).catch(error => {
+      console.log(error);
+      res.status(500).send(error.message);
+    });
+  }
+);
+
+/* protected method - delete show by id */
+router.delete(
+  "/:seasonId",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    const _id = req.params.seasonId;
+
+    Season.findOneAndDelete({ _id }, (error, season) => {
       if (error) {
-        throw new Error(error);
+        console.error(error);
       }
 
       res.status(200).send(season);
-    }
-  ).catch(error => {
-    console.log(error);
-    res.status(500).send(error.message);
-  });
-});
-
-/* protected method - delete show by id */
-router.delete("/:seasonId", (req, res, next) => {
-  const _id = req.params.seasonId;
-
-  Season.findOneAndDelete({ _id }, (error, season) => {
-    if (error) {
-      console.error(error);
-    }
-
-    res.status(200).send(season);
-  });
-});
+    });
+  }
+);
 
 module.exports = router;

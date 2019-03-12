@@ -8,6 +8,7 @@ import {
   Button,
   FormControlLabel
 } from "@material-ui/core";
+import { show as showApi } from "../../../../api/hbo";
 
 class ShowForm extends React.Component {
   state = {
@@ -19,48 +20,28 @@ class ShowForm extends React.Component {
 
     const excerpt = this.props.match.params.id;
 
+    const data = JSON.stringify(values);
+
     if (excerpt) {
       // edit
-      fetch(`http://localhost:3001/api/v1/show/${excerpt}`, {
-        method: "PUT",
-        body: JSON.stringify(values),
-        headers: new Headers({ "Content-type": "application/json" })
-      })
-        .then(response => {
-          if (response.status !== 200) {
-            throw new Error(response.error);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (!data._id) {
-            throw new Error("Bad response");
-          }
+
+      showApi
+        .put(`/${excerpt}`, data)
+        .then(res => {
+          if (res.status !== 200) throw new Error(res.data);
           this.props.history.push("/admin/show");
         })
         .catch(error => console.log(error));
     } else {
       // add
-      fetch("http://localhost:3001/api/v1/show", {
-        method: "POST",
-        body: JSON.stringify(values),
-        headers: new Headers({ "Content-type": "application/json" })
-      })
-        .then(response => {
-          if (response.status !== 201) {
-            throw new Error(response.error);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (!data._id) {
-            throw new Error("Bad response");
-          }
+
+      showApi
+        .post("/", data)
+        .then(res => {
+          if (res.status !== 201) throw new Error(res.data);
           this.props.history.push("/admin/show");
         })
-        .catch(error => {
-          console.log(error);
-        });
+        .catch(error => console.log(error));
     }
   };
 
@@ -82,18 +63,12 @@ class ShowForm extends React.Component {
     const excerpt = this.props.match.params.id;
 
     if (excerpt) {
-      fetch(`http://localhost:3001/api/v1/show/${excerpt}`)
-        .then(response => {
-          if (response.status !== 200) {
-            throw new Error(response.statusText);
-          }
+      showApi
+        .get(`/${excerpt}`)
+        .then(res => {
+          if (res.statusText !== 200) throw new Error(res.data);
 
-          return response.json();
-        })
-        .then(show => {
-          if (!show._id) {
-            throw new Error("Bad response from the server");
-          }
+          const show = res.data;
 
           if (show.firstAirDate) {
             show.firstAirDate = show.firstAirDate.slice(0, 10);

@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
 
 const User = require("../models/user");
 
@@ -7,61 +8,71 @@ const User = require("../models/user");
 router.get("/", (req, res, next) => {
   User.find({}, (error, users) => {
     if (error) {
-      console.log(error);
+      res.status(500).json(error);
     }
 
-    res.status(200).send(users);
+    res.status(200).json(users);
   });
 });
 
 /* get user by id */
 router.get("/:id", (req, res, next) => {
-  const _id = req.params.id;
+  const id = req.params.id;
 
-  User.findOne({ _id }, (error, user) => {
+  User.findById(id, (error, user) => {
     if (error) {
-      console.error(error);
+      res.status(500).end(error);
+    } else if (!user || !user._id) {
+      res.status(404).end("User not found");
+    } else {
+      res.status(200).json(user);
     }
-
-    res.status(200).send(user);
   });
 });
 
 /* create a new user */
 router.post("/", (req, res, next) => {
-  User.create(req.fields, (error, user) => {
+  User.create(req.body, (error, user) => {
     if (error) {
-      console.error(error);
+      res.status(500).json(error);
     }
 
-    res.status(201).send(user);
+    res.status(201).json(user);
   });
 });
 
 /* update user by id */
-router.put("/:id", (req, res, next) => {
-  const _id = req.params.id;
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    const _id = req.params.id;
 
-  User.findOneAndUpdate({ _id }, req.fields, { new: true }, (error, user) => {
-    if (error) {
-      console.error(error);
-    }
+    User.findOneAndUpdate({ _id }, req.body, { new: true }, (error, user) => {
+      if (error) {
+        res.status(500).json(error);
+      }
 
-    res.status(200).send(user);
-  });
-});
+      res.status(200).json(user);
+    });
+  }
+);
 
 /* delete user by id */
-router.delete("/:id", (req, res, next) => {
-  const _id = req.params.id;
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    const _id = req.params.id;
 
-  User.findOneAndDelete({ _id }, (error, user) => {
-    if (error) {
-      console.error(error);
-    }
+    User.findOneAndDelete({ _id }, (error, user) => {
+      if (error) {
+        res.status(500).json(error);
+      }
 
-    res.status(200).send(user);
-  });
-});
+      res.status(200).json(user);
+    });
+  }
+);
 
 module.exports = router;
