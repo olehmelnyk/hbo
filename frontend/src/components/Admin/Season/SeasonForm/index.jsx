@@ -16,7 +16,10 @@ class SeasonForm extends React.Component {
       fetch(`http://localhost:3001/api/v1/season/${season}`, {
         method: "PUT",
         body: JSON.stringify(values),
-        headers: new Headers({ "Content-type": "application/json" })
+        headers: new Headers({
+          "Content-type": "application/json",
+          Authorization: localStorage.getItem("jwtToken")
+        })
       })
         .then(response => {
           if (response.status !== 200) {
@@ -36,7 +39,10 @@ class SeasonForm extends React.Component {
       fetch("http://localhost:3001/api/v1/season", {
         method: "POST",
         body: JSON.stringify(values),
-        headers: new Headers({ "Content-type": "application/json" })
+        headers: new Headers({
+          "Content-type": "application/json",
+          Authorization: localStorage.getItem("jwtToken")
+        })
       })
         .then(response => {
           if (response.status !== 201) {

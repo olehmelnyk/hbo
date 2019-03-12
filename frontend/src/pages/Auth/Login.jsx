@@ -1,54 +1,51 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { loginUser } from "../../actions/authentication";
 import classnames from "classnames";
 
 class Login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      email: "",
-      password: "",
-      errors: {}
-    };
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+  state = {
+    email: "",
+    password: "",
+    errors: {}
+  };
 
-  handleInputChange(e) {
+  handleInputChange = event => {
     this.setState({
-      [e.target.name]: e.target.value
+      [event.target.name]: event.target.value
     });
-  }
+  };
 
-  handleSubmit(e) {
-    e.preventDefault();
+  handleSubmit = event => {
+    event.preventDefault();
+
     const user = {
       email: this.state.email,
       password: this.state.password
     };
-    this.props.loginUser(user);
-  }
 
-  componentDidMount() {
+    this.props.loginUser(user);
+  };
+
+  componentDidMount = () => {
     if (this.props.auth.isAuthenticated) {
       this.props.history.push("/");
     }
-  }
+  };
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps = nextProps => {
     if (nextProps.auth.isAuthenticated) {
       this.props.history.push("/");
     }
+
     if (nextProps.errors) {
       this.setState({
         errors: nextProps.errors
       });
     }
-  }
+  };
 
   render() {
     const { errors } = this.state;
@@ -96,12 +93,6 @@ class Login extends Component {
     );
   }
 }
-
-Login.propTypes = {
-  loginUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
-};
 
 const mapStateToProps = state => ({
   auth: state.auth,

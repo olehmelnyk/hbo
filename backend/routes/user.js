@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
 
 const User = require("../models/user");
 
@@ -41,29 +42,37 @@ router.post("/", (req, res, next) => {
 });
 
 /* update user by id */
-router.put("/:id", (req, res, next) => {
-  const _id = req.params.id;
+router.put(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    const _id = req.params.id;
 
-  User.findOneAndUpdate({ _id }, req.fields, { new: true }, (error, user) => {
-    if (error) {
-      res.status(500).json(error);
-    }
+    User.findOneAndUpdate({ _id }, req.fields, { new: true }, (error, user) => {
+      if (error) {
+        res.status(500).json(error);
+      }
 
-    res.status(200).json(user);
-  });
-});
+      res.status(200).json(user);
+    });
+  }
+);
 
 /* delete user by id */
-router.delete("/:id", (req, res, next) => {
-  const _id = req.params.id;
+router.delete(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    const _id = req.params.id;
 
-  User.findOneAndDelete({ _id }, (error, user) => {
-    if (error) {
-      res.status(500).json(error);
-    }
+    User.findOneAndDelete({ _id }, (error, user) => {
+      if (error) {
+        res.status(500).json(error);
+      }
 
-    res.status(200).json(user);
-  });
-});
+      res.status(200).json(user);
+    });
+  }
+);
 
 module.exports = router;

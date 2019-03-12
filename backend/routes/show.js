@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const passport = require("passport");
 
 const Show = require("../models/show");
 
@@ -56,48 +57,60 @@ router.get("/:excerpt", (req, res, next) => {
 });
 
 /* protected method - create a new show */
-router.post("/", (req, res, next) => {
-  Show.create(req.fields, (error, show) => {
-    if (error) {
-      console.log(error);
-      res.status(500).send(error);
-    }
-
-    res.status(201).send(show);
-  });
-});
-
-/* protected method - update show by id */
-router.put("/:excerpt", (req, res, next) => {
-  const excerpt = req.params.excerpt;
-
-  Show.findOneAndUpdate(
-    { excerpt },
-    req.fields,
-    { new: true },
-    (error, show) => {
+router.post(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    Show.create(req.fields, (error, show) => {
       if (error) {
         console.log(error);
+        res.status(500).send(error);
+      }
+
+      res.status(201).send(show);
+    });
+  }
+);
+
+/* protected method - update show by id */
+router.put(
+  "/:excerpt",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    const excerpt = req.params.excerpt;
+
+    Show.findOneAndUpdate(
+      { excerpt },
+      req.fields,
+      { new: true },
+      (error, show) => {
+        if (error) {
+          console.log(error);
+          res.status(400).json(error.message);
+        }
+
+        res.status(200).send(show);
+      }
+    );
+  }
+);
+
+/* protected method - delete show by id */
+router.delete(
+  "/:excerpt",
+  passport.authenticate("jwt", { session: false }),
+  (req, res, next) => {
+    const excerpt = req.params.excerpt;
+
+    Show.findOneAndDelete({ excerpt }, (error, show) => {
+      if (error) {
         res.status(400).json(error.message);
+        throw new Error(error.message);
       }
 
       res.status(200).send(show);
-    }
-  );
-});
-
-/* protected method - delete show by id */
-router.delete("/:excerpt", (req, res, next) => {
-  const excerpt = req.params.excerpt;
-
-  Show.findOneAndDelete({ excerpt }, (error, show) => {
-    if (error) {
-      res.status(400).json(error.message);
-      throw new Error(error.message);
-    }
-
-    res.status(200).send(show);
-  }).catch(error => console.log(error));
-});
+    }).catch(error => console.log(error));
+  }
+);
 
 module.exports = router;

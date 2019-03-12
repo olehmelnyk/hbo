@@ -17,14 +17,15 @@ class UserForm extends React.Component {
   onSubmit = async values => {
     const userId = this.props.match.params.id;
 
-    console.log(values);
-
     if (userId) {
       // edit
       fetch(`http://localhost:3001/api/v1/user/${userId}`, {
         method: "PUT",
         body: JSON.stringify(values),
-        headers: new Headers({ "Content-type": "application/json" })
+        headers: new Headers({
+          "Content-type": "application/json",
+          Authorization: localStorage.getItem("jwtToken")
+        })
       })
         .then(response => {
           if (response.status !== 200) {
@@ -44,7 +45,10 @@ class UserForm extends React.Component {
       fetch("http://localhost:3001/api/v1/auth/register", {
         method: "POST",
         body: JSON.stringify(values),
-        headers: new Headers({ "Content-type": "application/json" })
+        headers: new Headers({
+          "Content-type": "application/json",
+          Authorization: localStorage.getItem("jwtToken")
+        })
       })
         .then(response => {
           if (response.status !== 201) {

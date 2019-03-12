@@ -69,7 +69,8 @@ router.get(
       id: req.user._id,
       name: req.user.name,
       email: req.user.email,
-      avatar: req.user.avatar
+      avatar: req.user.avatar,
+      admin: req.user.admin
     });
   }
 );

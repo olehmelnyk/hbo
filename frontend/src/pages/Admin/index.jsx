@@ -20,6 +20,23 @@ class Admin extends React.Component {
     if (!isAuthenticated || user.exp < Math.round(Date.now() / 1000)) {
       this.props.logoutUser(this.props.history);
     }
+
+    fetch("http://localhost:3001/api/v1/auth/me", {
+      headers: new Headers({
+        Authorization: localStorage.getItem("jwtToken")
+      })
+    })
+      .then(response => {
+        if (response.status !== 200) {
+          this.props.logoutUser(this.props.history);
+        }
+        return response.json();
+      })
+      .then(user => {
+        if (!user.admin) {
+          this.props.logoutUser(this.props.history);
+        }
+      });
   }
 
   render() {

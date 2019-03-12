@@ -24,7 +24,10 @@ class ShowForm extends React.Component {
       fetch(`http://localhost:3001/api/v1/show/${excerpt}`, {
         method: "PUT",
         body: JSON.stringify(values),
-        headers: new Headers({ "Content-type": "application/json" })
+        headers: new Headers({
+          "Content-type": "application/json",
+          Authorization: localStorage.getItem("jwtToken")
+        })
       })
         .then(response => {
           if (response.status !== 200) {
@@ -44,7 +47,10 @@ class ShowForm extends React.Component {
       fetch("http://localhost:3001/api/v1/show", {
         method: "POST",
         body: JSON.stringify(values),
-        headers: new Headers({ "Content-type": "application/json" })
+        headers: new Headers({
+          "Content-type": "application/json",
+          Authorization: localStorage.getItem("jwtToken")
+        })
       })
         .then(response => {
           if (response.status !== 201) {
