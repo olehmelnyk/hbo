@@ -134,6 +134,7 @@ class ShowDetails extends React.Component {
                         float: "left",
                         margin: "0 24px 24px 0"
                       }}
+                      key={season._id}
                     >
                       <Paper
                         onClick={() =>

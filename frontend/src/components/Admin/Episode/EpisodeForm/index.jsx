@@ -2,6 +2,10 @@ import React from "react";
 import { Form, Field } from "react-final-form";
 import { TextField } from "final-form-material-ui";
 import { Typography, Paper, Grid, Button } from "@material-ui/core";
+import {
+  episode as episodeApi,
+  season as seasonApi
+} from "../../../../api/hbo";
 
 class EpisodeForm extends React.Component {
   state = {
@@ -11,51 +15,27 @@ class EpisodeForm extends React.Component {
   onSubmit = async values => {
     const { show, season, episode } = this.props.match.params;
 
+    const data = JSON.stringify(values);
+
     if (episode) {
       // edit
-      fetch(`http://localhost:3001/api/v1/episode/${episode}`, {
-        method: "PUT",
-        body: JSON.stringify(values),
-        headers: new Headers({
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwtToken")
-        })
-      })
-        .then(response => {
-          if (response.status !== 200) {
-            throw new Error(response.error);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (!data._id) {
-            throw new Error("Bad response");
-          }
+      episodeApi
+        .put(`/${episode}`, data)
+        .then(res => {
+          if (res.status !== 200) throw new Error(res.data);
           this.props.history.push(
             `/admin/show/${show}/season/${season}/episode`
           );
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+          console.log(error);
+        });
     } else {
       // add
-      fetch("http://localhost:3001/api/v1/episode", {
-        method: "POST",
-        body: JSON.stringify(values),
-        headers: new Headers({
-          "Content-type": "application/json",
-          Authorization: localStorage.getItem("jwtToken")
-        })
-      })
-        .then(response => {
-          if (response.status !== 201) {
-            throw new Error(response.statusText);
-          }
-          return response.json();
-        })
-        .then(data => {
-          if (!data._id) {
-            throw new Error("Bad response");
-          }
+      episodeApi
+        .post(`/${episode}`, data)
+        .then(res => {
+          if (res.status !== 201) throw new Error(res.data);
           this.props.history.push(
             `/admin/show/${show}/season/${season}/episode`
           );
@@ -81,25 +61,12 @@ class EpisodeForm extends React.Component {
     const { season, episode } = this.props.match.params;
 
     if (episode) {
-      fetch(`http://localhost:3001/api/v1/episode/${episode}`)
-        .then(response => {
-          if (response.status !== 200) {
-            throw new Error(response.statusText);
-          }
-
-          return response.json();
-        })
-        .then(episode => {
-          if (!episode._id) {
-            throw new Error("Bad response from the server");
-          }
-
-          if (episode.airDate) {
-            episode.airDate = episode.airDate.slice(0, 10);
-          }
-
+      episodeApi
+        .get(`/${episode}`)
+        .then(res => {
+          if (res.status !== 200) throw new Error(res.data);
           this.setState({
-            ...episode
+            episode: { ...res.data }
           });
         })
         .catch(error => {
@@ -108,21 +75,13 @@ class EpisodeForm extends React.Component {
         });
     }
 
-    fetch(`http://localhost:3001/api/v1/season/${season}`)
-      .then(response => {
-        if (response.status !== 200) {
-          throw new Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then(season => {
-        if (!season._id) {
-          throw new Error("Bad response from server");
-        }
-
+    seasonApi
+      .get(`/${season}`)
+      .then(res => {
+        if (res.status !== 200) throw new Error(res.data);
         this.setState({
-          relatedSeason: season._id,
-          relatedShow: season.relatedShow
+          relatedSeason: res.data._id,
+          relatedShow: res.data.relatedShow
         });
       })
       .catch(error => {

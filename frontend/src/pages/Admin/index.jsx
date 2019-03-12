@@ -6,6 +6,8 @@ import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authentication";
 import { withRouter } from "react-router-dom";
 
+import { auth as authApi } from "../../api/hbo";
+
 const Show = lazy(() => import("../../components/Admin/Show"));
 const User = lazy(() => import("../../components/Admin/User"));
 
@@ -21,25 +23,20 @@ class Admin extends React.Component {
       this.props.logoutUser(this.props.history);
     }
 
-    fetch("http://localhost:3001/api/v1/auth/me", {
-      headers: new Headers({
-        Authorization: localStorage.getItem("jwtToken")
-      })
-    })
-      .then(response => {
-        if (response.status !== 200) {
-          this.props.logoutUser(this.props.history);
-          throw new Error(response.statusText);
-        }
-        return response.json();
-      })
-      .then(user => {
+    authApi
+      .get("/me")
+      .then(res => {
+        if (res.status !== 200) throw new Error(res.data);
+        const user = res.data;
         if (!user.admin) {
           this.props.logoutUser(this.props.history);
           throw new Error("User not found");
         }
       })
-      .catch(error => console.log(error));
+      .catch(error => {
+        console.log(error);
+        this.props.logoutUser(this.props.history);
+      });
   }
 
   render() {

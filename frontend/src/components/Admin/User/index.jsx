@@ -11,7 +11,7 @@ const NotFound = lazy(() => import("../../../pages/NotFound"));
 const Show = props => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<LinearProgress color="primary" />}>
+      <Suspense fallback={<LinearProgress color="secondary" />}>
         <Switch>
           <Route
             path="/admin/user/add"

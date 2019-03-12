@@ -16,7 +16,6 @@ class SeasonForm extends React.Component {
 
     if (season) {
       // edit
-
       seasonApi
         .put(`/${season}`, data)
         .then(res => {
@@ -83,7 +82,6 @@ class SeasonForm extends React.Component {
     }
 
     // get the list of all shows - we need _id and titles
-
     showApi
       .get("/")
       .then(res => {

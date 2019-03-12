@@ -109,7 +109,6 @@ class SeasonDetails extends React.Component {
 
             <Grid
               container
-              xs={12}
               spacing={24}
               style={{
                 display: "flex",
@@ -120,7 +119,7 @@ class SeasonDetails extends React.Component {
             >
               {season.episodes.length > 0 &&
                 season.episodes.map(episode => (
-                  <Grid item xs={4}>
+                  <Grid item xs={4} key={episode._id}>
                     <Paper
                       style={{
                         minHeight: "400px"
@@ -140,7 +139,7 @@ class SeasonDetails extends React.Component {
                         }}
                       >
                         <div>
-                          <Typography component="h1" variant="title">
+                          <Typography component="h1" variant="h6">
                             {episode.episodeNumber}: {episode.episodeName}
                           </Typography>
                           <Typography variant="body1">

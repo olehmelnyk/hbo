@@ -3,6 +3,7 @@
 */
 import React from "react";
 import { Paper, Typography } from "@material-ui/core";
+import { show as showApi } from "../../../../api/hbo";
 
 class ShowDetails extends React.Component {
   state = {
@@ -10,25 +11,16 @@ class ShowDetails extends React.Component {
   };
 
   componentDidMount() {
-    const id = this.props.match.params.id;
+    const excerpt = this.props.match.params.id;
 
-    fetch(`http://localhost:3001/api/v1/show/${id}`)
-      .then(response => {
-        if (response.status !== 200) {
-          throw new Error(response.statusText);
-        }
-
-        return response.json();
-      })
-      .then(show => {
-        if (typeof show !== "object" || !show._id) {
-          console.log(show);
-          throw new Error("Bad data from server");
-        }
-
-        this.setState({ show });
+    showApi
+      .get(`/${excerpt}`)
+      .then(res => {
+        if (res.status !== 200) throw new Error(res.data);
+        this.setState({ show: res.data });
       })
       .catch(error => {
+        console.log(error);
         this.props.history.push("/page_not_found");
       });
   }
@@ -51,11 +43,7 @@ class ShowDetails extends React.Component {
           {show.subtitle}
         </Typography>
         <Typography>
-          {Object.entries(show).length > 0 ? (
-            <pre>{JSON.stringify(show, null, 4)}</pre>
-          ) : (
-            "Loading..."
-          )}
+          {show._id ? <pre>{JSON.stringify(show, null, 4)}</pre> : "Loading..."}
         </Typography>
       </Paper>
     );

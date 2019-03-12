@@ -40,24 +40,13 @@ class ShowList extends React.Component {
     const { shows } = this.state;
 
     return (
-      <div class="container">
-        {/*<Paper
-          style={{
-            margin: "24px auto",
-            padding: "24px",
-            maxWidth: 750
-          }}
-        >
-           <Typography component="h1" variant="h4">
-            Page that show list of all TV-shows (not just featured ones)
-          </Typography>
-        </Paper>*/}
+      <div className="container">
         <AppBar
           style={{
             backgroundColor: "#252837"
           }}
         >
-          <Toolbar class="toolbar">
+          <Toolbar className="toolbar">
             <div className="search-container">
               <InputBase placeholder="Search…" />
             </div>
@@ -76,40 +65,40 @@ class ShowList extends React.Component {
         {shows.length > 0 ? (
           shows.map(show => (
             <Paper
+              key={show._id}
               style={{
                 margin: "24px auto",
                 maxWidth: 750,
                 display: "flex",
                 flexDirection: "row"
               }}
+              onClick={() => this.props.history.push(`/show/${show.excerpt}`)}
             >
-              <div class="show">
+              <div className="show">
                 <img src={show.image.poster} alt={show.title} />
               </div>
 
-              <div class="show-container">
-                <div class="text-container">
-                  <p class="show-title">{show.title}</p>
-                  <p class="show-genres">{show.genres}</p>
-                  {/*<p class="show-created-at">created at {show.createdAt}</p>
-                  <p class="show-updated-at">updated at{show.updatedAt}</p>*/}
-                  <div class="seasons-and-episodes">
-                    <p class="show-number-of-episodes">
+              <div className="show-container">
+                <div className="text-container">
+                  <p className="show-title">{show.title}</p>
+                  <p className="show-genres">{show.genres}</p>
+                  {/*<p className="show-created-at">created at {show.createdAt}</p>
+                  <p className="show-updated-at">updated at{show.updatedAt}</p>*/}
+                  <div className="seasons-and-episodes">
+                    <p className="show-number-of-episodes">
                       {show.numberOfEpisodes} episodes
                     </p>
                     <hr />
-                    <p class="show-number-of-seasons">
+                    <p className="show-number-of-seasons">
                       {show.numberOfSeasons} seasons
                     </p>
                   </div>
                 </div>
 
-                <div class="subtitle-container">
+                <div className="subtitle-container">
                   <p>{show.subtitle}</p>
                 </div>
               </div>
-
-              {/* <pre>{JSON.stringify(show, null, 4)}</pre> */}
             </Paper>
           ))
         ) : (
