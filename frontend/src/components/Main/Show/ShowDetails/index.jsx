@@ -42,9 +42,9 @@ class ShowDetails extends React.Component {
         <Typography component="h2" variant="h5">
           {show.subtitle}
         </Typography>
-        <Typography>
+        <div>
           {show._id ? <pre>{JSON.stringify(show, null, 4)}</pre> : "Loading..."}
-        </Typography>
+        </div>
       </Paper>
     );
   }

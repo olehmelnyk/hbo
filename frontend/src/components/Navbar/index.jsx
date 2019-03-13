@@ -3,13 +3,8 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authentication";
 import { withRouter } from "react-router-dom";
-import {
-  AppBar,
-  Toolbar,
-  Button,
-  InputBase
-} from "@material-ui/core";
-import './navbar.css';
+import { AppBar, Toolbar } from "@material-ui/core";
+import "./navbar.css";
 
 class Navbar extends Component {
   onLogout = event => {
@@ -52,35 +47,41 @@ class Navbar extends Component {
     );
 
     return (
-
       <AppBar
         style={{
           backgroundColor: "#252837"
         }}
       >
         <Toolbar className="toolbar">
-          {/*<div className="search-container">
-              <InputBase placeholder="Search…" />
-            </div>*/}
-
           <Link className="shows-container" to="/">
-            <h1 className="header" style={{
-              color: '#fff',
-              margin: '15px'
-            }}>
-            <p style={{
-              fontSize: '30px',
-              fontWeight: 'bold',
-              margin: '0'
-            }}>HBO</p>
-            <p style={{
-              fontSize: '22px',
-              fontWeight: 'normal',
-              letterSpacing: '-1px',
-              margin: '0',
-              position: 'relative',
-              top: '-10px'
-            }}>shows</p>
+            <h1
+              className="header"
+              style={{
+                color: "#fff",
+                margin: "15px"
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "30px",
+                  fontWeight: "bold",
+                  margin: "0"
+                }}
+              >
+                HBO
+              </p>
+              <p
+                style={{
+                  fontSize: "22px",
+                  fontWeight: "normal",
+                  letterSpacing: "-1px",
+                  margin: "0",
+                  position: "relative",
+                  top: "-10px"
+                }}
+              >
+                shows
+              </p>
             </h1>
           </Link>
 
@@ -93,7 +94,6 @@ class Navbar extends Component {
           </div>
         </Toolbar>
       </AppBar>
-
     );
   }
 }
