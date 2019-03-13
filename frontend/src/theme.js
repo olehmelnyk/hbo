@@ -22,6 +22,11 @@ const theme = createMuiTheme({
       text: {
         color: grey[50]
       }
+    },
+    MuiPaper: {
+      elevation1:{
+        WebkitBoxShadow: 'none'
+      }
     }
   }
 });

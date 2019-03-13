@@ -1,0 +1,40 @@
+*{
+  font-family: 'Poppins';
+}
+a, li{
+  text-decoration: none;
+  list-style: none;
+}
+.toolbar{
+  display: flex;
+  justify-content: space-between;
+}
+.list{
+  display: flex;
+}
+.link:hover{
+  background-color: #fff;
+  color: #252837;
+}
+.link:active{
+  opacity: .5;
+  background-color: #fff;
+  color: #252837;
+}
+.link{
+  min-width: 120px;
+  min-height: 50px;
+  margin: 0 5px;
+  color: #252837;
+  background-color: #ffef02;
+  border-radius: 25px;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.current-page{
+  font-weight: normal;
+  font-size: 20px;
+}

@@ -5,10 +5,6 @@ import React from "react";
 import {
   Paper,
   Typography,
-  AppBar,
-  Toolbar,
-  Button,
-  InputBase
 } from "@material-ui/core";
 import "./show-list.css";
 
@@ -41,26 +37,6 @@ class ShowList extends React.Component {
 
     return (
       <div className="container">
-        <AppBar
-          style={{
-            backgroundColor: "#252837"
-          }}
-        >
-          <Toolbar className="toolbar">
-            <div className="search-container">
-              <InputBase placeholder="Search…" />
-            </div>
-
-            <div className="shows-container">
-              <h1 className="header">SHOWS</h1>
-            </div>
-
-            <div className="buttons-container">
-              <Button className="login">Login</Button>
-              <Button className="sign-up">Sign up</Button>
-            </div>
-          </Toolbar>
-        </AppBar>
 
         {shows.length > 0 ? (
           shows.map(show => (

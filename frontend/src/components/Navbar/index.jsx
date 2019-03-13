@@ -1,10 +1,15 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { logoutUser } from "../../actions/authentication";
 import { withRouter } from "react-router-dom";
+import {
+  AppBar,
+  Toolbar,
+  Button,
+  InputBase
+} from "@material-ui/core";
+import './navbar.css';
 
 class Navbar extends Component {
   onLogout = event => {
@@ -17,8 +22,8 @@ class Navbar extends Component {
     const { isAuthenticated, user } = this.props.auth;
 
     const authLinks = (
-      <ul className="navbar-nav ml-auto">
-        <div className="nav-link" onClick={this.onLogout}>
+      <ul className="">
+        <div className="" onClick={this.onLogout}>
           <img
             src={user.avatar}
             alt={user.name}
@@ -32,14 +37,14 @@ class Navbar extends Component {
     );
 
     const guestLinks = (
-      <ul className="navbar-nav ml-auto">
-        <li className="nav-item">
-          <Link className="nav-link" to="/register">
+      <ul className="list">
+        <li className="item">
+          <Link className="link" to="/register">
             Sign Up
           </Link>
         </li>
-        <li className="nav-item">
-          <Link className="nav-link" to="/login">
+        <li className="">
+          <Link className="link" to="/login">
             Sign In
           </Link>
         </li>
@@ -47,14 +52,48 @@ class Navbar extends Component {
     );
 
     return (
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <Link className="navbar-brand" to="/">
-          HBO
-        </Link>
-        <div className="collapse navbar-collapse">
-          {isAuthenticated ? authLinks : guestLinks}
-        </div>
-      </nav>
+
+      <AppBar
+        style={{
+          backgroundColor: "#252837"
+        }}
+      >
+        <Toolbar className="toolbar">
+          {/*<div className="search-container">
+              <InputBase placeholder="Search…" />
+            </div>*/}
+
+          <Link className="shows-container" to="/">
+            <h1 className="header" style={{
+              color: '#fff',
+              margin: '15px'
+            }}>
+            <p style={{
+              fontSize: '30px',
+              fontWeight: 'bold',
+              margin: '0'
+            }}>HBO</p>
+            <p style={{
+              fontSize: '22px',
+              fontWeight: 'normal',
+              letterSpacing: '-1px',
+              margin: '0',
+              position: 'relative',
+              top: '-10px'
+            }}>shows</p>
+            </h1>
+          </Link>
+
+          <div className="current-page">
+            <p>Current page</p>
+          </div>
+
+          <div className="buttons-container">
+            {isAuthenticated ? authLinks : guestLinks}
+          </div>
+        </Toolbar>
+      </AppBar>
+
     );
   }
 }
